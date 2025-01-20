@@ -12,12 +12,6 @@ export class RoomService {
 
   getRoom(): Observable<Room[]> {
     return this.http.get('rooms').pipe(
-      map(rooms => {
-        if (rooms instanceof Array) {
-          return rooms;
-        } 
-        return [];
-      })
-    );
+      map(rooms => rooms as Room[]) );
   }
 }
