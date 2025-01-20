@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
 import { Room } from '../shared/models/room.model';
-import { map } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +10,11 @@ export class RoomService {
 
   constructor(private readonly http: HttpService) { }
 
-  getRoom() {
+  getRoom(): Observable<Room[]> {
     return this.http.get('rooms').pipe(
       map(rooms => {
         if (rooms instanceof Array) {
-          return rooms.map(room => new Room(room));
+          return rooms;
         } 
         return [];
       })

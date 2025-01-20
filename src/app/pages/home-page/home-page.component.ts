@@ -16,7 +16,7 @@ export class HomePageComponent {
   constructor(private readonly stateService: StateService, private readonly roomService: RoomService) {
     this.rooms = this.stateService.rooms;
   }
-  rooms: Signal<Partial<Room>[]>;
+  rooms: Signal<Room[]>;
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.

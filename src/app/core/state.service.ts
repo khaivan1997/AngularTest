@@ -7,33 +7,33 @@ import { ServerResponse } from "../shared/models/server-response.model";
     providedIn: 'root'
 })
 export class StateService {
-    private readonly _responseData: WritableSignal<Partial<ServerResponse>> = signal({});
-    private readonly _contactDataForm: WritableSignal<Partial<ContactForm>> = signal({});
-    private readonly _rooms: WritableSignal<Partial<Room>[]> = signal([]);
+    private readonly _responseData: WritableSignal<ServerResponse> = signal({});
+    private readonly _contactDataForm: WritableSignal<ContactForm> = signal({});
+    private readonly _rooms: WritableSignal<Room[]> = signal([]);
 
     //get Only
-    public get responseData(): Signal<Partial<{statusCode: number; data: any;}>> {
+    public get responseData(): Signal<ServerResponse> {
         return this._responseData.asReadonly();
     }
 
-    public get contactDataForm(): Signal<Partial<ContactForm>> {
+    public get contactDataForm(): Signal<ContactForm> {
         return this._contactDataForm.asReadonly();
     }
 
-    public get rooms(): Signal<Partial<Room>[]> {
+    public get rooms(): Signal<Room[]> {
         return this._rooms.asReadonly();
     }
     //set 
-    public set responseData(value: Partial<ServerResponse>) {
+    public set responseData(value: ServerResponse) {
         this._responseData.set(value);
     }
 
-    public set contactDataForm(value: Partial<ContactForm>) {
+    public set contactDataForm(value: ContactForm) {
         this._contactDataForm.set(value);
 
     }
 
-    public set rooms(value: Partial<Room>[]) {
+    public set rooms(value: Room[]) {
         this._rooms.set(value);
     }
 

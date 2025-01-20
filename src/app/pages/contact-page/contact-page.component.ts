@@ -19,8 +19,8 @@ export class ContactPageComponent {
 
   inputWidth = 10;
 
-  contactFromData: Signal<Partial<ContactForm>>;
-  responseData!: Signal<Partial<ServerResponse>>;
+  contactFromData: Signal<ContactForm>;
+  responseData!: Signal<ServerResponse>;
 
   trySubmit() {
     console.log("try submit", this.contactFromData());

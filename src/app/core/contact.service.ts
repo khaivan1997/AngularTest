@@ -9,7 +9,7 @@ export class ContactService {
 
   constructor(private readonly http: HttpService) { }
 
-  postMessage(contactFromData: ContactForm | Partial<ContactForm>) {
+  postMessage(contactFromData: ContactForm) {
     return this.http.post('contact-form', contactFromData);
   }
 }
