@@ -1,5 +1,5 @@
 import { NgFor } from '@angular/common';
-import { Component, ContentChildren, Input, QueryList } from '@angular/core';
+import { Component, ContentChildren, QueryList } from '@angular/core';
 import { TabComponent } from '../tab/tab.component';
 
 @Component({
@@ -25,9 +25,5 @@ export class HorizontalTabbarComponent {
   
   // activate the tab the user has clicked on.
   tab.active = true;
-  }
-
-  selectTabByTitle(title: string) {
-
   }
 }

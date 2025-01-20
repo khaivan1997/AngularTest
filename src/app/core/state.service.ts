@@ -7,9 +7,9 @@ import { ServerResponse } from "../shared/models/server-response.model";
     providedIn: 'root'
 })
 export class StateService {
-    private _responseData: WritableSignal<Partial<ServerResponse>> = signal({});
-    private _contactDataForm: WritableSignal<Partial<ContactForm>> = signal({});
-    private _rooms: WritableSignal<Partial<Room>[]> = signal([]);
+    private readonly _responseData: WritableSignal<Partial<ServerResponse>> = signal({});
+    private readonly _contactDataForm: WritableSignal<Partial<ContactForm>> = signal({});
+    private readonly _rooms: WritableSignal<Partial<Room>[]> = signal([]);
 
     //get Only
     public get responseData(): Signal<Partial<{statusCode: number; data: any;}>> {

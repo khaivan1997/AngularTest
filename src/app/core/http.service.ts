@@ -1,15 +1,14 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { catchError, map, of } from 'rxjs';
-import { AjaxResponse } from 'rxjs/ajax';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HttpService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   get<T>(path: string) {
     return this.http.get(`${environment.apiUrl}/${path}`);

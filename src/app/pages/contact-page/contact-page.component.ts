@@ -1,4 +1,4 @@
-import { Component, effect, Signal } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import { ContactForm } from '../../shared/models/contact-form.models';
 import { FormsModule } from '@angular/forms';
 import { ContactService } from '../../core/contact.service';
@@ -12,7 +12,7 @@ import { ServerResponse } from '../../shared/models/server-response.model';
   styleUrl: './contact-page.component.css'
 })
 export class ContactPageComponent {
-  constructor(private contactService: ContactService, private stateService: StateService) {
+  constructor(private readonly contactService: ContactService, private readonly stateService: StateService) {
     this.contactFromData = this.stateService.contactDataForm;
     this.responseData = this.stateService.responseData;
   }

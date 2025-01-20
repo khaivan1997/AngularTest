@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'roomPrice'
 })
 export class RoomPricePipe implements PipeTransform {
-  static INVALID_PRICE = 'Unavailable';
+  static readonly INVALID_PRICE = 'Unavailable';
 
   transform(value: string | number | undefined | null, precision: number = 2, currency = 'EUR', local: string = 'de-DE'): string {
     let valueInNumber: number;

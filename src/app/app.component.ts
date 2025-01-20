@@ -1,4 +1,4 @@
-import { Component, effect, Inject, inject, ViewChild } from '@angular/core';
+import { Component, effect, ViewChild } from '@angular/core';
 import { NavigationStart, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { HorizontalTabbarComponent } from "./shared/elements/horizontal-tabbar/horizontal-tabbar.component";
 import { TabComponent } from "./shared/elements/tab/tab.component";
@@ -18,7 +18,7 @@ export class AppComponent {
   @ViewChild('tabbar') tabBar: HorizontalTabbarComponent;
 
   currentUrl: string;
-  constructor(private router: Router, private stateService: StateService){
+  constructor(private readonly router: Router, private readonly stateService: StateService){
     this.router.events.pipe(
       filter(ev => ev instanceof NavigationStart)
     ).subscribe( v => this.currentUrl = v.url);

@@ -8,7 +8,7 @@ import { map } from 'rxjs';
 })
 export class RoomService {
 
-  constructor(private http: HttpService) { }
+  constructor(private readonly http: HttpService) { }
 
   getRoom() {
     return this.http.get('rooms').pipe(

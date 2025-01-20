@@ -13,7 +13,7 @@ import { RoomPricePipe } from "../../shared/pipes/room-price.pipe";
   styleUrl: './home-page.component.css'
 })
 export class HomePageComponent {
-  constructor(private stateService: StateService, private roomService: RoomService) {
+  constructor(private readonly stateService: StateService, private readonly roomService: RoomService) {
     this.rooms = this.stateService.rooms;
   }
   rooms: Signal<Partial<Room>[]>;

@@ -7,7 +7,7 @@ import { ContactForm } from '../shared/models/contact-form.models';
 })
 export class ContactService {
 
-  constructor(private http: HttpService) { }
+  constructor(private readonly http: HttpService) { }
 
   postMessage(contactFromData: ContactForm | Partial<ContactForm>) {
     return this.http.post('contact-form', contactFromData);
