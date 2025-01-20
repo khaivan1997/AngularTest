@@ -20,7 +20,7 @@
         <div class="room-description" *ngFor="let room of rooms()">
             <div>
                 <h2>{{room.title}}</h2>
-                <p> {{room.description}}</p>
+                <p class="room-text-description"> {{room.description}}</p>
                 <p style="margin-top: 20px;"> Price per Night: {{room.price | roomPrice}} </p>
             </div>
             <div>

@@ -6,7 +6,7 @@
         "room1.png"
       ],
       "title": "Luxury 1",
-      "description": "Big Beautiful Room 1st Floor",
+      "description": "Big Beautiful Room 1st Floor. Our elegantly furnished hotel room offers the perfect blend of comfort and style at an affordable rate of just 100 EUR per night. Designed to provide a relaxing retreat, the room features a cozy bed with premium linens, a modern en-suite bathroom, and essential amenities such as free Wi-Fi, a flat-screen TV, and a minibar. Whether you're here for business or leisure, you'll enjoy a serene atmosphere and excellent service, ensuring a memorable stay without breaking the bank.",
       "price": 100
     },
     {
@@ -15,7 +15,7 @@
         "room1.png", "room1.png"
       ],
       "title": "Luxury 2",
-      "description": "Big Beautiful Room 2nd Floor",
+      "description": "Big Beautiful Room 2nd Floor. Our elegantly furnished hotel room offers the perfect blend of comfort and style at an affordable rate of just 100 EUR per night. Designed to provide a relaxing retreat, the room features a cozy bed with premium linens, a modern en-suite bathroom, and essential amenities such as free Wi-Fi, a flat-screen TV, and a minibar. Whether you're here for business or leisure, you'll enjoy a serene atmosphere and excellent service, ensuring a memorable stay without breaking the bank.",
       "price": 0
     }
   ]
