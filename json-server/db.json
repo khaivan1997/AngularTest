@@ -1,0 +1,22 @@
+{
+  "rooms": [
+    {
+      "id": "1",
+      "images": [
+        "room1.png"
+      ],
+      "title": "Luxury 1",
+      "description": "Big Beautiful Room 1st Floor",
+      "price": 100
+    },
+    {
+      "id": "2",
+      "images": [
+        "room1.png", "room1.png"
+      ],
+      "title": "Luxury 2",
+      "description": "Big Beautiful Room 2nd Floor",
+      "price": 0
+    }
+  ]
+}

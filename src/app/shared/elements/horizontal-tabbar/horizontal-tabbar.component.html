@@ -1,0 +1,9 @@
+<div class="horizontal-tabbar">
+    <div class="tab-title-container content-center" 
+    *ngFor=" let tab of tabs" 
+    (click)="selectTab(tab)"
+    [class.active]="tab.active">
+        {{tab.title}}
+    </div>
+</div>
+<ng-content></ng-content>

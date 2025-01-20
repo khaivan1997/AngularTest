@@ -1,0 +1,12 @@
+:root {
+    --blue-color: rgb(29, 96, 147);
+    --light-blue-color: rgb(128, 185, 228);
+    --white-color: rgb(242, 243, 245);
+    --red-color: red;
+    --green-color:green;
+
+
+    /* named color  */
+    --error-color: var(--red-color);
+    --active-color: var(--green-color)
+}

@@ -1,0 +1,31 @@
+<div class="home-page-container">
+    <h1>Welcome</h1>
+    <p>Discover a world of comfort and elegance at [Hotel Name], where timeless hospitality meets modern luxury. Nestled
+        in the heart of [location], our hotel offers a tranquil escape while keeping you close to the vibrant city
+        attractions.</p>
+
+    <p> Whether you're here for business or leisure, our meticulously designed rooms and suites provide the perfect
+        haven to relax and recharge. Indulge in our exceptional amenities, including [mention key facilities like a
+        rooftop pool, spa, fine dining restaurants, or a fitness center], all thoughtfully curated to make your stay
+        unforgettable. </p>
+
+    <p>>At [Hotel Name], we pride ourselves on delivering personalized service and creating memorable experiences. From
+        the moment you arrive, our dedicated team is here to ensure your visit exceeds expectations.</p>
+
+    <p> Come and experience the charm and sophistication of [Hotel Name]. Your journey to unparalleled comfort begins
+        here.</p>
+    <h1>Available Rooms:</h1>
+
+    <div class="content-center room-list">
+        <div class="room-description" *ngFor="let room of rooms()">
+            <div>
+                <h2>{{room.title}}</h2>
+                <p> {{room.description}}</p>
+                <p style="margin-top: 20px;"> Price per Night: {{room.price | roomPrice}} </p>
+            </div>
+            <div>
+                <img *ngFor="let image of room.images" [src]="getImageUrl(image)" />
+            </div>
+        </div>
+    </div>
+</div>

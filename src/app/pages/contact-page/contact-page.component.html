@@ -1,0 +1,29 @@
+<div class="contact-page-container content-center">
+    @if (isReponseEmpty()) {
+    <div>
+        <label>UserName:</label><br>
+        <input [size]="inputWidth" [(ngModel)]="contactFromData().name"><br>
+        <p class="error-text" [hidden]="contactFromData().name"> Invalid Input</p>
+    </div>
+    <div>
+        <label>Message:</label><br>
+        <textarea [rows]="inputWidth" [cols]="inputWidth" [(ngModel)]="contactFromData().message"></textarea><br>
+        <p class="error-text" [hidden]="contactFromData().message"> Invalid Input</p>
+    </div>
+    <div>
+        <button class="submit-btn" (click)="trySubmit()"
+            [disabled]="!(contactFromData.name && contactFromData().message)"> Submit </button>
+    </div>
+    } @else {
+    <div>
+        <p [class.error-text]="responseData().statusCode! >= 400" [class.success-text]="responseData().statusCode! <= 300">
+            {{responseData().data.message}}
+        </p>
+    </div>
+    <div>
+        <button class="submit-btn" (click)="resendNewMsg()"> Resend Message </button>
+    </div>
+    
+    }
+
+</div>

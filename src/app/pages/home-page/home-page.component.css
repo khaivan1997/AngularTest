@@ -1,0 +1,21 @@
+.home-page-container {
+
+}
+
+.home-page-container .room-list{
+    flex-direction: column;
+    gap: 5px;
+}
+
+.home-page-container .room-description {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    align-items: center;
+    border: 3px black solid;
+    padding: 10px;
+}
+
+.home-page-container img {
+    max-width: 100%;
+    height: auto;
+}
