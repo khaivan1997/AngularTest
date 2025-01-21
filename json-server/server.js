@@ -1,5 +1,4 @@
 const jsonServer = require('json-server')
-const express = require('express')
 const server = jsonServer.create()
 const router = jsonServer.router('./json-server/db.json')
 const middlewares = jsonServer.defaults(
@@ -28,7 +27,7 @@ server.use((req, res, next) => {
       if (req.body.name && req.body.message  && req.body.name !== 'invalid') {
         res.status(200).jsonp({
           message: "Your message has been sent"
-        })
+        });
       } else {
         res.status(400).jsonp({
           message: "There was an issue with sending your message"
