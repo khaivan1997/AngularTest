@@ -23,9 +23,7 @@ export class ContactPageComponent {
   responseData!: Signal<ServerResponse>;
 
   trySubmit() {
-    console.log("try submit", this.contactFromData());
     this.contactService.postMessage(this.contactFromData()).subscribe(res => {
-      console.log("get post result", res);
       this.stateService.responseData = res;
     });
   }

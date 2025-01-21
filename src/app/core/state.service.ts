@@ -37,6 +37,9 @@ export class StateService {
         this._rooms.set(value);
     }
 
+    /**
+     * debug only
+     */
     public printState(){
         console.log(`The current state is:`, this.responseData(), this._contactDataForm(), this._rooms());
     }

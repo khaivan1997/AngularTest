@@ -23,8 +23,8 @@ export class AppComponent {
       filter(ev => ev instanceof NavigationStart)
     ).subscribe( v => this.currentUrl = v.url);
 
-    effect(() => {
-      this.stateService.printState();
-    });
+    // effect(() => {
+    //   this.stateService.printState();
+    // });
   }
 }
