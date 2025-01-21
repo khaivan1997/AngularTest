@@ -19,21 +19,20 @@ describe('RoomPricePipe', () => {
   });
 
   it('should auto add EUR as ccy', () => {
-    expect(pipe.transform(100).replace(/\s+/, "")).toBe('100 Euro'.replace(/\s+/, ""));
+    expect(pipe.transform(1000).replace(/\s+/, "")).toBe('10 Euro'.replace(/\s+/, ""));
   });
 
-  it('should format the number as an precisions', () => {
-    expect(pipe.transform(123.4599, 0).replace(/\s+/, "")).toBe('123 Euro'.replace(/\s+/, ""));
-    expect(pipe.transform(123.4599, 1).replace(/\s+/, "")).toBe('123,5 Euro'.replace(/\s+/, ""));
-    expect(pipe.transform(123.4509, 3).replace(/\s+/, "")).toBe('123,451 Euro'.replace(/\s+/, ""));
+  it('the last 2 digit is always cent and rounding', () => {
+    expect(pipe.transform(105).replace(/\s+/, "")).toBe('1,05 Euro'.replace(/\s+/, ""));
+    expect(pipe.transform(1250).replace(/\s+/, "")).toBe('12,5 Euro'.replace(/\s+/, ""));
 
   });
 
   it('should handle negative numbers correctly', () => {
-    expect(pipe.transform(-123.45).replace(/\s+/, "")).toBe('-123,45 Euro'.replace(/\s+/, ""));
+    expect(pipe.transform(-12345).replace(/\s+/, "")).toBe('-123,45 Euro'.replace(/\s+/, ""));
   });
 
   it('should correctly format large numbers with the EUR symbol', () => {
-    expect(pipe.transform(123456789.987).replace(/\s+/, "")).toBe('123.456.789,99 Euro'.replace(/\s+/, ""));
+    expect(pipe.transform(12345678999).replace(/\s+/, "")).toBe('123.456.789,99 Euro'.replace(/\s+/, ""));
   });
 });

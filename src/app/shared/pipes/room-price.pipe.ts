@@ -25,6 +25,6 @@ export class RoomPricePipe implements PipeTransform {
         minimumFractionDigits: 0,
         maximumFractionDigits: precision,
         currency: currency
-      }).format(valueInNumber);
+      }).format(valueInNumber/Math.pow(10, precision));
   }
 }
