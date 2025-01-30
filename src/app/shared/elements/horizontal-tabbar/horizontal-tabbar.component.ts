@@ -1,5 +1,5 @@
 import { NgFor } from '@angular/common';
-import { Component, ContentChildren, QueryList } from '@angular/core';
+import { AfterContentInit, Component, ContentChildren, QueryList } from '@angular/core';
 import { TabComponent } from '../tab/tab.component';
 
 @Component({
@@ -8,7 +8,7 @@ import { TabComponent } from '../tab/tab.component';
   templateUrl: './horizontal-tabbar.component.html',
   styleUrl: './horizontal-tabbar.component.css'
 })
-export class HorizontalTabbarComponent {
+export class HorizontalTabbarComponent implements AfterContentInit {
   @ContentChildren(TabComponent) tabs: QueryList<TabComponent>;
 
   ngAfterContentInit(): void {

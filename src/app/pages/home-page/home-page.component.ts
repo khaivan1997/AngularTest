@@ -1,5 +1,5 @@
 import { NgFor } from '@angular/common';
-import { Component, Signal } from '@angular/core';
+import { Component, OnInit, Signal } from '@angular/core';
 import { Room } from '../../shared/models/room.model';
 import { StateService } from '../../core/state.service';
 import { environment } from '../../../environments/environment';
@@ -12,7 +12,7 @@ import { RoomPricePipe } from "../../shared/pipes/room-price.pipe";
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
 })
-export class HomePageComponent {
+export class HomePageComponent implements OnInit {
   constructor(private readonly stateService: StateService, private readonly roomService: RoomService) {
     this.rooms = this.stateService.rooms;
   }
