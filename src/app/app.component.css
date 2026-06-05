@@ -1,27 +1,42 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #d5e3e8;
+  background: rgba(255, 255, 255, 0.92);
+}
+
 .app-title {
-    background-color: var(--blue-color);
-    padding: 20px 50px;
-    color: var(--white-color);
-    border: black 5px solid;
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
-.navbar-links {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    -webkit-align-items: center;
-    background-color: var(--light-blue-color);
-    gap: 5px;
+.app-nav a {
+  color: #48606c;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
 }
 
-.navbar-links .tab-title-container {
-    width: 100px;
-    text-overflow: ellipsis;
-    text-decoration: underline;
-    font-weight:bold;
-    cursor: pointer;
+.app-nav a.active {
+  background: #2d5bff;
+  color: #fff;
 }
 
-.navbar-links .tab-title-container .active {
-    color: green;
+.app-main {
+  flex: 1;
+  min-height: 0;
 }

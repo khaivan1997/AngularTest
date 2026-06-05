@@ -1,0 +1,119 @@
+<div class="fabric-demo-shell">
+  <div class="fabric-demo-toolbar">
+    <div class="fabric-demo-toolbar-row">
+      <button type="button" [class.active]="tool() === 'select'" (click)="setTool('select')">Select</button>
+      <button type="button" (click)="addRectangle()">Rectangle</button>
+      <button type="button" (click)="addCircle()">Circle</button>
+      <button type="button" (click)="addTriangle()">Triangle</button>
+      <button type="button" (click)="addLine()">Line</button>
+      <button type="button" (click)="addCylinder()">Cylinder</button>
+      <button type="button" (click)="addCircularRingSector()">Circular Ring Sector</button>
+      <button type="button" (click)="addPath()">Add Path</button>
+      <button type="button" (click)="addSvg()">Add SVG</button>
+      <button type="button" (click)="addText()">Text</button>
+      <button type="button" (click)="addLabel()">Label</button>
+      <button type="button" [class.active]="tool() === 'freehand'" (click)="setTool('freehand')">Freehand</button>
+    </div>
+    <div class="fabric-demo-toolbar-row">
+      <button type="button" (click)="duplicateSelection()">Duplicate</button>
+      <button type="button" (click)="bringSelectionToFront()">Bring to Front</button>
+      <button type="button" (click)="sendSelectionToBack()">Send to Back</button>
+      <button type="button" (click)="fillSelection()">Fill</button>
+      <label class="fabric-demo-color-picker-label">
+        Color
+        <input type="color" class="fabric-demo-color-picker" [value]="fillColor()" (input)="updateFillColor($event)" />
+      </label>
+      <button type="button" (click)="connectSelection()">Connect</button>
+      <button type="button" (click)="groupSelection()">Group</button>
+      <button type="button" (click)="ungroupSelection()">Ungroup</button>
+      <button type="button" (click)="triggerSceneImport()">Import Scene</button>
+      <button type="button" (click)="exportScene()">Export JSON</button>
+      <button type="button" (click)="clearScene()">Reset</button>
+      <span class="fabric-demo-status">{{ status() }}</span>
+    </div>
+  </div>
+
+  <div class="fabric-demo-layout">
+    <div class="fabric-demo-stage">
+      <canvas #fabricCanvas></canvas>
+    </div>
+
+    <section class="fabric-demo-panel">
+      <div class="fabric-demo-tabs">
+        <button type="button" class="fabric-demo-tab" [class.selected]="activeTab() === 'hierarchy'" (click)="setActiveTab('hierarchy')">Hierarchy</button>
+        <button type="button" class="fabric-demo-tab" [class.selected]="activeTab() === 'json'" (click)="setActiveTab('json')">JSON</button>
+      </div>
+
+      @if (activeTab() === 'hierarchy') {
+        <div class="fabric-demo-hierarchy-header">
+          <h2 class="fabric-demo-title">Object Hierarchy</h2>
+          <div class="fabric-demo-hierarchy-toggles">
+            <label class="fabric-demo-children-toggle">
+              <input type="checkbox" [checked]="showHierarchyChildren()" (change)="toggleHierarchyChildren($event)" />
+              <span>Show children</span>
+            </label>
+            <label class="fabric-demo-children-toggle">
+              <input type="checkbox" [checked]="showLabeledGroupsOnly()" (change)="toggleLabeledGroupsOnly($event)" />
+              <span>Groups with labels</span>
+            </label>
+          </div>
+        </div>
+        <div class="fabric-demo-object-list">
+          <table class="fabric-demo-object-table">
+            <tbody>
+              @for (item of sortedSceneItems(); track item.id) {
+                <tr class="fabric-demo-object-row" [class.selected]="selectedSceneIds().includes(item.id)" (click)="selectSceneItem(item, $event)">
+                  <td class="fabric-demo-object-cell fabric-demo-object-cell-checkbox">
+                    @if (item.depth === 0) {
+                      <input type="checkbox" class="fabric-demo-object-checkbox" [checked]="item.visible" (click)="$event.stopPropagation()" (change)="toggleSceneItemVisibility(item, $event)" />
+                    } @else {
+                      <span class="fabric-demo-object-checkbox-placeholder"></span>
+                    }
+                  </td>
+                  <td class="fabric-demo-object-cell fabric-demo-object-cell-labels">
+                    @if (item.connectorLabels.length > 0) {
+                      <div class="fabric-demo-object-connector-labels">
+                        @for (connectorLabel of item.connectorLabels; track connectorLabel.id) {
+                          <input
+                            type="text"
+                            class="fabric-demo-object-connector-label-input"
+                            [value]="connectorLabel.label"
+                            (click)="$event.stopPropagation()"
+                            (keydown)="$event.stopPropagation()"
+                            (blur)="renameConnectorLabel(connectorLabel.id, $event)"
+                          />
+                        }
+                      </div>
+                    }
+                  </td>
+                  <td class="fabric-demo-object-cell fabric-demo-object-cell-info" [style.padding-left.rem]="0.875 + item.depth * 1.25">
+                    <div class="fabric-demo-object-info-stack">
+                      <div class="fabric-demo-object-info-top">
+                        <span class="fabric-demo-object-tree">{{ item.hasChildren ? '▾' : '•' }}</span>
+                        <span class="fabric-demo-object-kind">{{ item.type }}</span>
+                        @if (item.depth === 0) {
+                          <button type="button" class="fabric-demo-object-delete" (click)="deleteSceneItem(item, $event)">Delete</button>
+                        }
+                      </div>
+                      <input
+                        type="text"
+                        class="fabric-demo-object-label-input"
+                        [value]="item.label"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                        (blur)="renameSceneItem(item, $event)"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <h2 class="fabric-demo-title">Scene JSON</h2>
+        <pre class="fabric-demo-json">{{ sceneJson() }}</pre>
+      }
+    </section>
+  </div>
+</div>

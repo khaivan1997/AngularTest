@@ -1,0 +1,336 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.fabric-demo-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+  padding: 1rem;
+  background:
+    radial-gradient(circle at top left, rgba(45, 91, 255, 0.12), transparent 26%),
+    linear-gradient(180deg, #f7fafc 0%, #eef3f6 100%);
+}
+
+.fabric-demo-toolbar,
+.fabric-demo-panel {
+  border: 1px solid #d5e3e8;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.fabric-demo-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.fabric-demo-toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.fabric-demo-toolbar button,
+.fabric-demo-tab,
+.fabric-demo-object-delete {
+  border: 1px solid #c8d7de;
+  border-radius: 0.75rem;
+  background: #fff;
+  color: #203038;
+  padding: 0.6rem 0.85rem;
+  cursor: pointer;
+}
+
+.fabric-demo-toolbar button.active,
+.fabric-demo-tab.selected {
+  background: #2d5bff;
+  color: #fff;
+  border-color: #2d5bff;
+}
+
+.fabric-demo-status {
+  color: #48606c;
+  font-size: 0.95rem;
+}
+
+.fabric-demo-color-picker-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #203038;
+  font-size: 0.9rem;
+}
+
+.fabric-demo-color-picker {
+  width: 2.15rem;
+  height: 2.15rem;
+  border: 1px solid #c8d7de;
+  border-radius: 0.5rem;
+  padding: 0.1rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+.fabric-demo-hidden-input {
+  display: none;
+}
+
+.fabric-demo-layout {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.fabric-demo-stage {
+  flex: 1;
+  min-height: 0;
+  padding: 1rem;
+  border: 1px solid #d5e3e8;
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.78);
+  overflow: auto;
+}
+
+.fabric-demo-stage canvas {
+  width: min(100%, 1400px);
+  height: auto;
+  border-radius: 1rem;
+  border: 1px solid #d5e3e8;
+  box-shadow: 0 18px 40px rgba(18, 49, 58, 0.12);
+}
+
+.fabric-demo-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: min(32rem, 38vw);
+  min-width: 18rem;
+  min-height: 0;
+  padding: 1rem;
+  background: rgba(18, 49, 58, 0.96);
+}
+
+.fabric-demo-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f5fafb;
+}
+
+.fabric-demo-hierarchy-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.fabric-demo-hierarchy-toggles {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.fabric-demo-children-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(245, 250, 251, 0.9);
+  font-size: 0.85rem;
+}
+
+.fabric-demo-children-toggle input {
+  accent-color: #69a8ff;
+}
+
+.fabric-demo-tabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  border-radius: 0.875rem;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.fabric-demo-tab {
+  background: transparent;
+  color: rgba(245, 250, 251, 0.72);
+}
+
+.fabric-demo-object-list {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.fabric-demo-object-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+}
+
+.fabric-demo-object-row {
+  cursor: pointer;
+}
+
+.fabric-demo-object-cell {
+  padding: 0.75rem 0.875rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f5fafb;
+  vertical-align: top;
+}
+
+.fabric-demo-object-cell:first-child {
+  border-top-left-radius: 0.875rem;
+  border-bottom-left-radius: 0.875rem;
+}
+
+.fabric-demo-object-cell:last-child {
+  border-top-right-radius: 0.875rem;
+  border-bottom-right-radius: 0.875rem;
+}
+
+.fabric-demo-object-row.selected .fabric-demo-object-cell {
+  background: rgba(45, 91, 255, 0.22);
+  box-shadow: inset 0 0 0 1px rgba(105, 168, 255, 0.55);
+}
+
+.fabric-demo-object-cell-checkbox {
+  width: 2.75rem;
+  text-align: center;
+}
+
+.fabric-demo-object-cell-labels {
+  width: 4rem;
+  min-width: 4rem;
+  max-width: 4rem;
+}
+
+.fabric-demo-object-cell-info {
+  width: auto;
+}
+
+.fabric-demo-object-info-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.fabric-demo-object-info-top {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.fabric-demo-object-checkbox,
+.fabric-demo-object-checkbox-placeholder {
+  width: 1rem;
+  flex: 0 0 1rem;
+}
+
+.fabric-demo-object-checkbox {
+  accent-color: #69a8ff;
+}
+
+.fabric-demo-object-tree {
+  width: 1rem;
+  color: rgba(245, 250, 251, 0.62);
+  text-align: center;
+  flex: 0 0 1rem;
+}
+
+.fabric-demo-object-label,
+.fabric-demo-object-label-input,
+.fabric-demo-object-label-stack {
+  width: 100%;
+}
+
+.fabric-demo-object-connector-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  width: 4rem;
+}
+
+.fabric-demo-object-connector-label-input {
+  width: 4rem;
+  max-width: 4rem;
+  min-width: 4rem;
+  box-sizing: border-box;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  color: #69a8ff;
+  border: 1px solid rgba(105, 168, 255, 0.35);
+  border-radius: 0.45rem;
+  background: rgba(105, 168, 255, 0.1);
+  padding: 0.2rem 0.45rem;
+}
+
+.fabric-demo-object-connector-label-input:focus {
+  outline: none;
+  border-color: #69a8ff;
+  box-shadow: 0 0 0 2px rgba(105, 168, 255, 0.18);
+}
+
+.fabric-demo-object-label-input {
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.55rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f5fafb;
+  padding: 0.35rem 0.55rem;
+}
+
+.fabric-demo-object-label-input:focus {
+  outline: none;
+  border-color: #69a8ff;
+  box-shadow: 0 0 0 2px rgba(105, 168, 255, 0.18);
+}
+
+.fabric-demo-object-kind {
+  margin-left: auto;
+  color: rgba(245, 250, 251, 0.62);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.fabric-demo-object-delete {
+  border: 0;
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.12);
+  color: #f5fafb;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.75rem;
+}
+
+.fabric-demo-json {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 1rem;
+  white-space: pre;
+  overflow: auto;
+  border-radius: 0.875rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #d9f3ef;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 1280px) {
+  .fabric-demo-layout {
+    flex-direction: column;
+  }
+
+  .fabric-demo-panel {
+    width: 100%;
+  }
+}

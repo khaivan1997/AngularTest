@@ -1,47 +1,12 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<div class="app-shell">
+  <header class="app-header">
+    <div class="app-title">AngularTest Fabric Drafting</div>
+    <nav class="app-nav">
+      <a routerLink="/drawing" routerLinkActive="active">Drafting</a>
+    </nav>
+  </header>
 
-
-<main class="main">
-  <div class="content-center">
-    <h2 class="app-title"> {{title}}</h2>
-  </div>
-  <horizontal-tabbar #tabbar>
-    <tab tabTitle="Home">
-      <app-home-page></app-home-page>
-    </tab>
-    <tab tabTitle="Contact">
-      <app-contact-page></app-contact-page>
-    </tab>
-  </horizontal-tabbar>
-
-  <div class="navbar-links" style="margin-top: 5px;">
-    <div class="tab-title-container content-center">
-      <a routerLink="/home" [class.active]="'\/home' == currentUrl">
-        Home
-      </a>
-    </div>
-    <div class="tab-title-container content-center">
-      <a routerLink="/contact" [class.active]="'\/contact' == currentUrl">
-        Contact
-      </a>
-    </div>
-  </div>
-</main>
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-
-<router-outlet />
+  <main class="app-main">
+    <router-outlet></router-outlet>
+  </main>
+</div>

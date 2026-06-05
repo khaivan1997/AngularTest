@@ -1,3 +1,20 @@
-/* You can add global styles to this file, and also import other style files */
-@import "./global-styles/color.css";
-@import "./global-styles/layout.css";
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: #eef3f6;
+  color: #203038;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}

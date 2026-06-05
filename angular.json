@@ -3,18 +3,20 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "AngularTask": {
+    "angular-test": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "css"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/angular-task",
-            "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
@@ -28,8 +30,7 @@
             ],
             "styles": [
               "src/styles.css"
-            ],
-            "scripts": []
+            ]
           },
           "configurations": {
             "production": {
@@ -50,13 +51,7 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.development.ts"
-                }
-              ]
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
@@ -65,10 +60,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "AngularTask:build:production"
+              "buildTarget": "angular-test:build:production"
             },
             "development": {
-              "buildTarget": "AngularTask:build:development"
+              "buildTarget": "angular-test:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -92,14 +87,13 @@
             ],
             "styles": [
               "src/styles.css"
-            ],
-            "scripts": []
+            ]
           }
         }
       }
     }
   },
   "cli": {
-    "analytics": "5b0f4a67-98ac-4fab-97b5-6041b736051a"
+    "analytics": "06776396-17c0-4064-a770-bf251a41f587"
   }
 }

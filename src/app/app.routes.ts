@@ -1,15 +1,14 @@
 import { Routes } from '@angular/router';
-import { HomePageComponent } from './pages/home-page/home-page.component';
-import { ContactPageComponent } from './pages/contact-page/contact-page.component';
+import { FabricDrawingWrapperView } from './components/fabric-drawing-wrapper-view/fabric-drawing-wrapper-view';
 
 export const routes: Routes = [
-    {
-        path: '', component: HomePageComponent
-    },
-    {
-        path: 'home', component: HomePageComponent,
-    },
-    {
-        path: 'contact', component: ContactPageComponent,
-    }
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'drawing',
+  },
+  {
+    path: 'drawing',
+    component: FabricDrawingWrapperView,
+  },
 ];
