@@ -755,11 +755,24 @@ export class FabricDrawingWrapperView implements AfterViewInit, OnDestroy {
       return;
     }
 
-    object.set('visible', !object.visible);
-    if (!object.visible && canvas.getActiveObject() === object) {
-      canvas.discardActiveObject();
-      this.selectedSceneIds.set([]);
+    const nextVisible = !object.visible;
+    object.set('visible', nextVisible);
+    const linkedLabelIds = this.syncConnectedLabelsVisibilityForObject(object, nextVisible);
+
+    if (!nextVisible) {
+      const hiddenSceneIds = new Set<string>([
+        ...this.collectSceneIds(object),
+        ...linkedLabelIds,
+      ]);
+      const hasHiddenSelection = this.getSelectedCanvasObjects().some((selectedObject) => (
+        this.collectSceneIds(selectedObject).some((sceneId) => hiddenSceneIds.has(sceneId))
+      ));
+      if (hasHiddenSelection) {
+        canvas.discardActiveObject();
+        this.selectedSceneIds.set([]);
+      }
     }
+
     this.syncConnectorsForObject(object);
     canvas.requestRenderAll();
     this.refreshSceneState();
@@ -1307,6 +1320,30 @@ export class FabricDrawingWrapperView implements AfterViewInit, OnDestroy {
     if (connectors.length > 0) {
       canvas.remove(...connectors);
     }
+  }
+
+  private syncConnectedLabelsVisibilityForObject(object: fabric.FabricObject, visible: boolean): string[] {
+    const labelIds = new Set<string>();
+
+    for (const sceneId of this.collectSceneIds(object)) {
+      const connectors = this.findConnectorsForTarget(sceneId);
+      for (const connector of connectors) {
+        const labelId = String(connector.get('connectorLabelId') ?? '');
+        if (!labelId) {
+          continue;
+        }
+        labelIds.add(labelId);
+      }
+    }
+
+    for (const labelId of labelIds) {
+      const labelObject = this.findCanvasObjectById(labelId);
+      if (labelObject) {
+        labelObject.set('visible', visible);
+      }
+    }
+
+    return [...labelIds];
   }
 
   private syncConnectorsForObject(object: fabric.FabricObject): void {
