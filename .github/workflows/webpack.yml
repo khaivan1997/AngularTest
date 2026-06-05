@@ -27,7 +27,7 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/angular-task/browser
+          path: dist/angular-test/browser
 
   deploy:
     needs: build
