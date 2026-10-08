@@ -43,12 +43,31 @@ export class FabricDrawingWrapperView implements AfterViewInit, OnDestroy {
       return connectorLabels[0] ?? '\uffff';
     };
 
-    return [...this.sceneItems()].sort((left, right) => (
+    const compareSceneItems = (left: SceneItem, right: SceneItem): number => (
       connectorSortLabel(left).localeCompare(connectorSortLabel(right), undefined, { sensitivity: 'base', numeric: true })
       || left.label.localeCompare(right.label, undefined, { sensitivity: 'base', numeric: true })
       || left.type.localeCompare(right.type, undefined, { sensitivity: 'base' })
       || left.id.localeCompare(right.id, undefined, { sensitivity: 'base' })
-    ));
+    );
+
+    const hierarchyItems = this.sceneItems();
+    if (!this.showHierarchyChildren()) {
+      return [...hierarchyItems].sort(compareSceneItems);
+    }
+
+    const hierarchyBlocks: Array<{ root: SceneItem; items: SceneItem[] }> = [];
+    for (const item of hierarchyItems) {
+      if (item.depth === 0) {
+        hierarchyBlocks.push({ root: item, items: [item] });
+        continue;
+      }
+
+      hierarchyBlocks.at(-1)?.items.push(item);
+    }
+
+    return hierarchyBlocks
+      .sort((left, right) => compareSceneItems(left.root, right.root))
+      .flatMap((block) => block.items);
   });
   protected readonly selectedSceneIds = signal<string[]>([]);
   protected readonly activeTab = signal<PanelTab>('hierarchy');
