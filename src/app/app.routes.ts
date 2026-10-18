@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { FabricDrawingWrapperView } from './components/fabric-drawing-wrapper-view/fabric-drawing-wrapper-view';
+import { DrawingSheet } from './components/drawing-sheet/drawing-sheet';
 
 export const routes: Routes = [
   {
@@ -9,6 +9,6 @@ export const routes: Routes = [
   },
   {
     path: 'drawing',
-    component: FabricDrawingWrapperView,
+    component: DrawingSheet,
   },
 ];

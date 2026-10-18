@@ -1,0 +1,13 @@
+<aside class="template-view" aria-label="Templates">
+  <ul class="template-list">
+    @for (template of templates(); track template.id) {
+      <li class="template-row">
+        <svg class="template-preview" width="96" height="72" viewBox="-22 -18 44 36" aria-hidden="true" focusable="false">
+          <use [attr.href]="templateStore.getHref(template.id)"></use>
+        </svg>
+        <span class="template-name">{{ template.name }}</span>
+        <eh-tag [label]="template.category"></eh-tag>
+      </li>
+    }
+  </ul>
+</aside>

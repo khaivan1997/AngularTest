@@ -1,0 +1,36 @@
+<div class="drawing-view__toolbar" role="toolbar" aria-label="Drawing options">
+  <div class="toggle-bar">
+    <label class="select-box__label" for="grid-mode">Grid</label>
+    <select
+      id="grid-mode"
+      class="select-box"
+      [value]="gridMode()"
+      (change)="onGridModeChange($event)"
+    >
+      <option value="noGrid">No grid</option>
+      <option value="minorGrid">Minor grid</option>
+      <option value="majorGrid">Major grid</option>
+    </select>
+  </div>
+</div>
+
+<div class="drawing-view__canvas">
+  <svg
+    class="drawing-view__svg"
+    aria-label="Drawing"
+    [attr.width]="drawingWidth"
+    [attr.height]="drawingHeight"
+    [attr.viewBox]="drawingViewBox"
+    [style.width.px]="drawingWidth"
+    [style.height.px]="drawingHeight"
+  >
+    @if (gridFill(); as fill) {
+      <rect
+        class="drawing-view__grid"
+        [attr.width]="drawingWidth"
+        [attr.height]="drawingHeight"
+        [attr.fill]="fill"
+      ></rect>
+    }
+  </svg>
+</div>

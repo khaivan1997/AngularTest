@@ -1,0 +1,46 @@
+:host {
+  display: block;
+  min-width: 0;
+  min-height: 0;
+}
+
+.template-view {
+  overflow: auto;
+  height: 100%;
+}
+
+.template-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0.75rem;
+  list-style: none;
+}
+
+.template-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 3.25rem;
+  padding: 0.4rem;
+  border: 1px solid #d5e3e8;
+  border-radius: 0.5rem;
+  background: #fff;
+}
+
+.template-preview {
+  flex: 0 0 6rem;
+  width: 6rem;
+  height: 4.5rem;
+  overflow: visible;
+  color: #203038;
+}
+
+.template-name {
+  min-width: 0;
+  flex: 1 1 auto;
+  color: #203038;
+  font-size: 0.78rem;
+  line-height: 1.2;
+}
