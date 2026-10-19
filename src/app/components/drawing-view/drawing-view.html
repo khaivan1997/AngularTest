@@ -54,7 +54,7 @@
 
 <div class="drawing-view__canvas">
   <svg
-    #drawingSvg
+    #drawingSvgElement
     class="drawing-view__svg"
     aria-label="Drawing"
     [attr.width]="drawingWidth"
@@ -67,7 +67,7 @@
     (drop)="onDrop($event)"
     (wheel)="onWheel($event)"
   >
-    <g #drawingViewport [attr.transform]="drawingTransform()">
+    <g #drawingViewportElement [attr.transform]="drawingTransform()">
       @if (gridFill(); as fill) {
         <rect
           class="drawing-view__grid"
@@ -79,6 +79,11 @@
         ></rect>
       }
 
+      <g
+        mouse-connection-line
+        [svg]="drawingSvg().nativeElement"
+        [viewport]="drawingViewport().nativeElement"
+      ></g>
       <ng-container #drawingItems></ng-container>
     </g>
   </svg>

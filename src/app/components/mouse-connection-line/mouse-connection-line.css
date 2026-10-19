@@ -1,0 +1,18 @@
+:host .mouse-connection-line__glow {
+  fill: none;
+  stroke: #1976d2;
+  stroke-width: 7;
+  opacity: 0.25;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+:host .mouse-connection-line__path {
+  fill: none;
+  stroke: #1976d2;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}

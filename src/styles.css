@@ -18,3 +18,8 @@ input,
 textarea {
   font: inherit;
 }
+
+.svg-hidden {
+  opacity: 0;
+  pointer-events: none;
+}

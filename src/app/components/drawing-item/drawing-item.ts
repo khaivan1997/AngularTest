@@ -10,6 +10,7 @@ import {
   model,
   signal,
   viewChild,
+  viewChildren,
 } from '@angular/core';
 import { DrawingStore } from '../../store/drawing-store';
 import { TemplateStore } from '../../store/template-store';
@@ -71,10 +72,17 @@ export class DrawingItem implements AfterViewInit {
   protected readonly bounds = signal<DrawingItemBounds | null>(null);
   protected readonly positionTransform = computed(() => `translate(${this.posX()} ${this.posY()})`);
   private readonly templateUse = viewChild.required<ElementRef<SVGUseElement>>('templateUse');
+  private readonly portElements = viewChildren<ElementRef<SVGCircleElement>>('drawingPort');
   private pointerDrag: PointerDragState | null = null;
 
   ngAfterViewInit(): void {
     this.updateBounds();
+  }
+
+  public getPortElement(portId: string): SVGCircleElement | undefined {
+    return this.portElements().find(
+      (portElement) => portElement.nativeElement.getAttribute('data-port-id') === portId,
+    )?.nativeElement;
   }
 
   @HostListener('pointerdown', ['$event'])

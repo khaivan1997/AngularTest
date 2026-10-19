@@ -11,10 +11,12 @@ import {
 import { DrawingStore, type GridMode } from '../../store/drawing-store';
 import { clamp } from '../../util/numeric.util';
 import { DrawingItem } from '../drawing-item/drawing-item';
+import { MouseConnectionLine } from '../mouse-connection-line/mouse-connection-line';
 
 @Component({
   selector: 'app-drawing-view',
   standalone: true,
+  imports: [MouseConnectionLine],
   templateUrl: './drawing-view.html',
   styleUrl: './drawing-view.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,8 +44,8 @@ export class DrawingView {
   protected readonly activeTool = this.drawingStore.activeTool;
   protected readonly svgCursor = computed(() => (this.activeTool() === 'select' ? 'pointer' : 'crosshair'));
   protected readonly selectedEntities = this.drawingStore.signalSelectedEntities;
-  private readonly drawingSvg = viewChild.required<ElementRef<SVGSVGElement>>('drawingSvg');
-  private readonly drawingViewport = viewChild.required<ElementRef<SVGGElement>>('drawingViewport');
+  protected readonly drawingSvg = viewChild.required<ElementRef<SVGSVGElement>>('drawingSvgElement');
+  protected readonly drawingViewport = viewChild.required<ElementRef<SVGGElement>>('drawingViewportElement');
   private readonly drawingItems = viewChild.required<string, ViewContainerRef>('drawingItems', {
     read: ViewContainerRef,
   });

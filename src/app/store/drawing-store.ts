@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { computed, inject, Injectable, signal, type ComponentRef } from '@angular/core';
 import type { DrawingItem } from '../components/drawing-item/drawing-item';
+import type { TemplatePortMetadata } from '../model/utilities';
+import {
+  calculateCurveControlPoint,
+  calculatePortEndPosition,
+  createCurve as createCurvePath,
+} from '../util/math-util';
 import { snapTo } from '../util/numeric.util';
 import { TemplateStore } from './template-store';
 
@@ -93,8 +99,56 @@ export class DrawingStore {
     return grid === null ? value : snapTo(value, grid.tileHeight);
   }
 
+  getGridUnit() {
+    return this.gridDefinition()?.tileWidth ?? null;
+  }
+
+  getPortEndPosition(port: TemplatePortMetadata, position: DOMPoint) {
+    const length = this.getGridUnit() ?? 10;
+
+    return calculatePortEndPosition(port, position, length);
+  }
+
+  getCurveControlPoint(
+    startPoint: DOMPoint,
+    curvePoint: DOMPoint,
+    destinationPoint: DOMPoint,
+  ) {
+    return calculateCurveControlPoint(
+      startPoint,
+      curvePoint,
+      destinationPoint,
+      this.getGridUnit() ?? 10,
+    );
+  }
+
+  createCurve(
+    fromStart: DOMPoint,
+    fromEnd: DOMPoint,
+    destinationStart: DOMPoint,
+    destinationEnd: DOMPoint,
+  ) {
+    return createCurvePath(
+      fromStart,
+      fromEnd,
+      destinationStart,
+      destinationEnd,
+      this.getGridUnit() ?? 10,
+    );
+  }
+
   getEntity(itemId: string) {
     return this.renderedEntities().get(itemId);
+  }
+
+  getPort(itemId: string, portId: string) {
+    const entity = this.renderedEntities().get(itemId);
+
+    if (!entity) {
+      return undefined;
+    }
+
+    return this.templateStore.getTemplate(entity.instance.hrefId())?.ports.find((port) => port.id === portId);
   }
 
   deregister(itemId: string) {

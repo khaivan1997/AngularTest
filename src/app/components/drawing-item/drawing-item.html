@@ -17,17 +17,17 @@
     [attr.height]="bounds()?.height"
   ></svg:rect>
 }
-@if (arePortsVisible()) {
-  @for (port of ports(); track port.id) {
-    <svg:circle
-      class="drawing-item__port te-port"
-      [class.is-process]="port.medium === 'process'"
-      [class.is-electrical]="port.medium === 'electrical'"
-      [attr.data-object-id]="itemId"
-      [attr.data-port-id]="port.id"
-      [attr.cx]="port.position.x"
-      [attr.cy]="port.position.y"
-      r="2"
-    ></svg:circle>
-  }
+@for (port of ports(); track port.id) {
+  <svg:circle
+    #drawingPort
+    class="drawing-item__port te-port"
+    [class.svg-hidden]="!arePortsVisible()"
+    [class.is-process]="port.medium === 'process'"
+    [class.is-electrical]="port.medium === 'electrical'"
+    [attr.data-object-id]="itemId"
+    [attr.data-port-id]="port.id"
+    [attr.cx]="port.position.x"
+    [attr.cy]="port.position.y"
+    r="2"
+  ></svg:circle>
 }
