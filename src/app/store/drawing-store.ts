@@ -1,25 +1,27 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { computed, Injectable, signal, type ComponentRef } from '@angular/core';
+import { computed, inject, Injectable, signal, type ComponentRef } from '@angular/core';
 import type { DrawingItem } from '../components/drawing-item/drawing-item';
 import { snapTo } from '../util/numeric.util';
+import { TemplateStore } from './template-store';
 
 export type DrawingTool = 'select' | 'connect';
 export type GridMode = 'noGrid' | 'minorGrid' | 'majorGrid';
 
 @Injectable({ providedIn: 'root' })
 export class DrawingStore {
+  private readonly templateStore = inject(TemplateStore);
   private readonly renderedEntities = signal<ReadonlyMap<string, ComponentRef<DrawingItem>>>(new Map());
   readonly entities = computed(() => this.renderedEntities().values());
-  readonly signalSelectedEntity = signal<ComponentRef<DrawingItem> | null>(null);
+  readonly signalSelectedEntities = signal<Set<ComponentRef<DrawingItem>>>(new Set());
   readonly activeTool = signal<DrawingTool>('select');
   readonly currentZoom = signal(1);
   readonly gridMode = signal<GridMode>('majorGrid');
-  private readonly gridUnit = computed<number | null>(() => {
+  private readonly gridDefinition = computed(() => {
     switch (this.gridMode()) {
       case 'minorGrid':
-        return 10;
+        return this.templateStore.gridMinor;
       case 'majorGrid':
-        return 20;
+        return this.templateStore.gridMajor;
       default:
         return null;
     }
@@ -33,8 +35,38 @@ export class DrawingStore {
     });
   }
 
-  selectEntity(entity: ComponentRef<DrawingItem> | null) {
-    this.signalSelectedEntity.set(entity);
+  setSelect(entity: ComponentRef<DrawingItem>, selected = true) {
+    this.signalSelectedEntities.update((entities) => {
+      const nextEntities = new Set(entities);
+
+      if (selected) {
+        nextEntities.add(entity);
+      } else {
+        nextEntities.delete(entity);
+      }
+
+      return nextEntities;
+    });
+  }
+
+  selectAllById(itemId: string, selected: boolean) {
+    this.signalSelectedEntities.update((entities) => {
+      const nextEntities = new Set(entities);
+
+      for (const entity of this.renderedEntities().values()) {
+        if (entity.instance.hrefId() !== itemId) {
+          continue;
+        }
+
+        if (selected) {
+          nextEntities.add(entity);
+        } else {
+          nextEntities.delete(entity);
+        }
+      }
+
+      return nextEntities;
+    });
   }
 
   setActiveTool(tool: DrawingTool) {
@@ -50,15 +82,15 @@ export class DrawingStore {
   }
 
   snapToGridX(value: number) {
-    const unit = this.gridUnit();
+    const grid = this.gridDefinition();
 
-    return unit === null ? value : snapTo(value, unit);
+    return grid === null ? value : snapTo(value, grid.tileWidth);
   }
 
   snapToGridY(value: number) {
-    const unit = this.gridUnit();
+    const grid = this.gridDefinition();
 
-    return unit === null ? value : snapTo(value, unit);
+    return grid === null ? value : snapTo(value, grid.tileHeight);
   }
 
   getEntity(itemId: string) {
@@ -76,8 +108,12 @@ export class DrawingStore {
       });
     }
 
-    if (this.signalSelectedEntity()?.instance.itemId === itemId) {
-      this.selectEntity(null);
+    const selectedEntity = [...this.signalSelectedEntities()].find(
+      (selected) => selected.instance.itemId === itemId,
+    );
+
+    if (selectedEntity) {
+      this.setSelect(selectedEntity, false);
     }
   }
 
@@ -96,7 +132,7 @@ export class DrawingStore {
     const entities = [...this.renderedEntities().values()];
 
     this.renderedEntities.set(new Map());
-    this.selectEntity(null);
+    this.signalSelectedEntities.set(new Set());
 
     for (const entity of entities) {
       entity.destroy();

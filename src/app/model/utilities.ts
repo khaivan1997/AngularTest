@@ -22,3 +22,13 @@ export interface Connection {
   readonly from: Endpoint;
   readonly to: Endpoint;
 }
+
+export const GRID_MINOR = {
+  tileWidth: 10,
+  tileHeight: 10,
+} as const;
+
+export const GRID_MAJOR = {
+  tileWidth: 20,
+  tileHeight: 20,
+} as const;

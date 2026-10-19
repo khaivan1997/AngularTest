@@ -11,7 +11,11 @@
     </thead>
     <tbody>
       @for (entity of entityRows(); track entity.id) {
-        <tr>
+        <tr
+          [class.selected]="selectedTemplateIds().has(entity.id)"
+          [attr.aria-selected]="selectedTemplateIds().has(entity.id)"
+          (click)="onEntityRowClick(entity.id)"
+        >
           <!-- <td>{{ entity.id }}</td> -->
           <td>{{ entity.quantity }}</td>
           <td>{{ entity.name }}</td>

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { computed, Injectable, signal } from '@angular/core';
-import type { TemplatePortMetadata } from '../model/utilities';
+import { GRID_MAJOR, GRID_MINOR, type TemplatePortMetadata } from '../model/utilities';
 
 export const PREDEFINED_TEMPLATE_IDS = {
   entnahmestelleAmProzessrohr: 'entnahmestelle-am-prozessrohr',
@@ -327,6 +327,8 @@ const PREDEFINED_TEMPLATE_METADATA = [
 
 @Injectable({ providedIn: 'root' })
 export class TemplateStore {
+  readonly gridMinor = GRID_MINOR;
+  readonly gridMajor = GRID_MAJOR;
   private readonly templatesSignal = signal<readonly TemplateMetadata[]>(PREDEFINED_TEMPLATE_METADATA);
 
   readonly templates = this.templatesSignal.asReadonly();

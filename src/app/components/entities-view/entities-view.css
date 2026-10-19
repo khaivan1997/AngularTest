@@ -39,6 +39,14 @@
   font-weight: 600;
 }
 
+.entities-view__table tbody tr.selected {
+  background: #eef0f2;
+}
+
+.entities-view__table tbody tr {
+  cursor: pointer;
+}
+
 .entities-view__table th:nth-child(2),
 .entities-view__table td:nth-child(2) {
   text-align: right;

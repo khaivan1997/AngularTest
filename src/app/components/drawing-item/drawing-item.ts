@@ -59,7 +59,11 @@ export class DrawingItem implements AfterViewInit {
   protected readonly posY = model.required<number>();
   protected readonly currentEntity = computed(() => this.drawingStore.getEntity(this.itemId));
   protected readonly isVisuallySelected = computed(
-    () => this.drawingStore.signalSelectedEntity() === this.currentEntity(),
+    () => {
+      const entity = this.currentEntity();
+
+      return entity ? this.drawingStore.signalSelectedEntities().has(entity) : false;
+    },
   );
   protected readonly arePortsVisible = computed(
     () => this.isVisuallySelected() || this.drawingStore.activeTool() === 'connect',
@@ -91,11 +95,10 @@ export class DrawingItem implements AfterViewInit {
       return;
     }
 
-    const currentEntity = this.drawingStore.signalSelectedEntity();
-    const wasSelected = currentEntity === entityRef;
+    const wasSelected = this.drawingStore.signalSelectedEntities().has(entityRef);
 
     if (!wasSelected) {
-      this.drawingStore.selectEntity(entityRef);
+      this.drawingStore.setSelect(entityRef);
     }
 
     event.preventDefault();
@@ -150,8 +153,10 @@ export class DrawingItem implements AfterViewInit {
 
     this.pointerDrag = null;
 
-    if (toggleSelection && pointerDrag.wasSelected && !pointerDrag.moved) {
-      this.drawingStore.selectEntity(null);
+    const entityRef = this.currentEntity();
+
+    if (entityRef && toggleSelection && pointerDrag.wasSelected && !pointerDrag.moved) {
+      this.drawingStore.setSelect(entityRef, false);
     }
 
     if (this.hostElement.nativeElement.hasPointerCapture(pointerId)) {

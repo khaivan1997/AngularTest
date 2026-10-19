@@ -41,7 +41,7 @@ export class DrawingView {
   });
   protected readonly activeTool = this.drawingStore.activeTool;
   protected readonly svgCursor = computed(() => (this.activeTool() === 'select' ? 'pointer' : 'crosshair'));
-  protected readonly selectedEntity = this.drawingStore.signalSelectedEntity;
+  protected readonly selectedEntities = this.drawingStore.signalSelectedEntities;
   private readonly drawingSvg = viewChild.required<ElementRef<SVGSVGElement>>('drawingSvg');
   private readonly drawingViewport = viewChild.required<ElementRef<SVGGElement>>('drawingViewport');
   private readonly drawingItems = viewChild.required<string, ViewContainerRef>('drawingItems', {
@@ -108,13 +108,15 @@ export class DrawingView {
   }
 
   protected onDelete(): void {
-    const selectedEntity = this.selectedEntity();
+    const selectedEntities = this.selectedEntities();
 
-    if (!selectedEntity) {
+    if (selectedEntities.size === 0) {
       return;
     }
 
-    this.drawingStore.deleteEntity(selectedEntity.instance.itemId);
+    for (const entity of [...selectedEntities]) {
+      this.drawingStore.deleteEntity(entity.instance.itemId);
+    }
   }
 
   protected onClear(): void {

@@ -21,7 +21,7 @@
     <button
       type="button"
       class="drawing-view__tool-button drawing-view__tool-button--delete"
-      [disabled]="!selectedEntity()"
+      [disabled]="selectedEntities().size === 0"
       (click)="onDelete()"
     >
       Delete

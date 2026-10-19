@@ -19,6 +19,22 @@ export class EntitiesView {
   private readonly drawingStore = inject(DrawingStore);
   private readonly templateStore = inject(TemplateStore);
 
+  protected readonly selectedTemplateIds = computed(() => {
+    const selectedTemplateIds = new Set<string>();
+
+    for (const entity of this.drawingStore.signalSelectedEntities()) {
+      selectedTemplateIds.add(entity.instance.hrefId());
+    }
+
+    return selectedTemplateIds;
+  });
+
+  protected onEntityRowClick(itemId: string): void {
+    const selected = !this.selectedTemplateIds().has(itemId);
+
+    this.drawingStore.selectAllById(itemId, selected);
+  }
+
   protected readonly entityRows = computed<readonly EntityRow[]>(() => {
     const quantities = new Map<string, number>();
 
