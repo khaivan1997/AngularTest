@@ -13,6 +13,7 @@ import {
   viewChildren,
 } from '@angular/core';
 import { DrawingStore } from '../../store/drawing-store';
+import { ItemsStore } from '../../store/items-store';
 import { TemplateStore } from '../../store/template-store';
 
 interface DrawingItemBounds {
@@ -39,16 +40,19 @@ interface PointerDragState {
   styleUrl: './drawing-item.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    '[attr.drawing-id]': 'itemId()',
     '[attr.transform]': 'positionTransform()',
     '[class.is-selected]': 'isVisuallySelected()',
   },
 })
 export class DrawingItem implements AfterViewInit {
+  public readonly type = 'item' as const;
   private readonly drawingStore = inject(DrawingStore);
+  private readonly itemsStore = inject(ItemsStore);
   private readonly templateStore = inject(TemplateStore);
   private readonly hostElement = inject<ElementRef<SVGGElement>>(ElementRef);
 
-  public readonly itemId = crypto.randomUUID();
+  public readonly itemId = input<string>(crypto.randomUUID());
   protected readonly templateHref = input.required<string>();
   public readonly hrefId = computed(() => {
     const href = this.templateHref();
@@ -58,12 +62,12 @@ export class DrawingItem implements AfterViewInit {
   protected readonly ports = computed(() => this.templateStore.getTemplate(this.hrefId())?.ports ?? []);
   protected readonly posX = model.required<number>();
   protected readonly posY = model.required<number>();
-  protected readonly currentEntity = computed(() => this.drawingStore.getEntity(this.itemId));
+  protected readonly currentEntity = computed(() => this.itemsStore.getEntity(this.itemId()));
   protected readonly isVisuallySelected = computed(
     () => {
       const entity = this.currentEntity();
 
-      return entity ? this.drawingStore.signalSelectedEntities().has(entity) : false;
+      return entity ? this.itemsStore.selectedEntities().has(entity) : false;
     },
   );
   protected readonly arePortsVisible = computed(
@@ -71,6 +75,7 @@ export class DrawingItem implements AfterViewInit {
   );
   protected readonly bounds = signal<DrawingItemBounds | null>(null);
   protected readonly positionTransform = computed(() => `translate(${this.posX()} ${this.posY()})`);
+  public readonly currentTransformPosition = computed(() => this.getCurrentTransformPosition());
   private readonly templateUse = viewChild.required<ElementRef<SVGUseElement>>('templateUse');
   private readonly portElements = viewChildren<ElementRef<SVGCircleElement>>('drawingPort');
   private pointerDrag: PointerDragState | null = null;
@@ -83,6 +88,12 @@ export class DrawingItem implements AfterViewInit {
     return this.portElements().find(
       (portElement) => portElement.nativeElement.getAttribute('data-port-id') === portId,
     )?.nativeElement;
+  }
+
+  public getCurrentTransformPosition(): { readonly position: DOMPoint } {
+    return {
+      position: new DOMPoint(this.posX(), this.posY()),
+    };
   }
 
   @HostListener('pointerdown', ['$event'])
@@ -103,10 +114,10 @@ export class DrawingItem implements AfterViewInit {
       return;
     }
 
-    const wasSelected = this.drawingStore.signalSelectedEntities().has(entityRef);
+    const wasSelected = this.itemsStore.selectedEntities().has(entityRef);
 
     if (!wasSelected) {
-      this.drawingStore.setSelect(entityRef);
+      this.drawingStore.setSelected(entityRef, true);
     }
 
     event.preventDefault();
@@ -164,7 +175,7 @@ export class DrawingItem implements AfterViewInit {
     const entityRef = this.currentEntity();
 
     if (entityRef && toggleSelection && pointerDrag.wasSelected && !pointerDrag.moved) {
-      this.drawingStore.setSelect(entityRef, false);
+      this.drawingStore.setSelected(entityRef, false);
     }
 
     if (this.hostElement.nativeElement.hasPointerCapture(pointerId)) {

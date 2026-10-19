@@ -83,6 +83,7 @@
         mouse-connection-line
         [svg]="drawingSvg().nativeElement"
         [viewport]="drawingViewport().nativeElement"
+        (connectionCreated)="addNewConnection($event)"
       ></g>
       <ng-container #drawingItems></ng-container>
     </g>

@@ -5,11 +5,16 @@ import {
   ElementRef,
   inject,
   signal,
+  type ComponentRef,
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import type {Connection} from '../../model/utilities';
+import { ConnectionStore } from '../../store/connection-store';
 import { DrawingStore, type GridMode } from '../../store/drawing-store';
+import { ItemsStore } from '../../store/items-store';
 import { clamp } from '../../util/numeric.util';
+import { Connector } from '../connector/connector';
 import { DrawingItem } from '../drawing-item/drawing-item';
 import { MouseConnectionLine } from '../mouse-connection-line/mouse-connection-line';
 
@@ -23,6 +28,8 @@ import { MouseConnectionLine } from '../mouse-connection-line/mouse-connection-l
 })
 export class DrawingView {
   private readonly drawingStore = inject(DrawingStore);
+  private readonly connectionStore = inject(ConnectionStore);
+  private readonly itemsStore = inject(ItemsStore);
   protected readonly drawingWidth = 800;
   protected readonly drawingHeight = 600;
   protected readonly drawingViewBox = `0 0 ${this.drawingWidth} ${this.drawingHeight}`;
@@ -43,7 +50,7 @@ export class DrawingView {
   });
   protected readonly activeTool = this.drawingStore.activeTool;
   protected readonly svgCursor = computed(() => (this.activeTool() === 'select' ? 'pointer' : 'crosshair'));
-  protected readonly selectedEntities = this.drawingStore.signalSelectedEntities;
+  protected readonly selectedEntities = this.itemsStore.selectedEntities;
   protected readonly drawingSvg = viewChild.required<ElementRef<SVGSVGElement>>('drawingSvgElement');
   protected readonly drawingViewport = viewChild.required<ElementRef<SVGGElement>>('drawingViewportElement');
   private readonly drawingItems = viewChild.required<string, ViewContainerRef>('drawingItems', {
@@ -111,18 +118,17 @@ export class DrawingView {
 
   protected onDelete(): void {
     const selectedEntities = this.selectedEntities();
+    const selectedConnections = this.connectionStore.signalSelectedConnections();
 
-    if (selectedEntities.size === 0) {
+    if (selectedEntities.size === 0 && selectedConnections.size === 0) {
       return;
     }
 
-    for (const entity of [...selectedEntities]) {
-      this.drawingStore.deleteEntity(entity.instance.itemId);
-    }
+    this.drawingStore.deleteSelected();
   }
 
   protected onClear(): void {
-    this.drawingStore.clear();
+    this.itemsStore.clear();
   }
 
   protected onDragOver(event: DragEvent): void {
@@ -155,17 +161,52 @@ export class DrawingView {
       y: this.drawingStore.snapToGridY(dropPosition.y),
     };
 
-    const drawingItemRef = this.drawingItems().createComponent(DrawingItem);
-    drawingItemRef.setInput('templateHref', `#${templateId}`);
-    drawingItemRef.setInput('posX', snappedPosition.x);
-    drawingItemRef.setInput('posY', snappedPosition.y);
-    drawingItemRef.changeDetectorRef.detectChanges();
-    this.drawingStore.register(drawingItemRef);
+    this.addDrawingItem('', templateId, snappedPosition.x, snappedPosition.y);
 
     console.log('Template dropped', {
       templateId,
       dropPosition: { x: dropPosition.x, y: dropPosition.y },
       snappedPosition,
     });
+  }
+
+  protected addNewConnection(connection: Connection): void {
+    this.addConnector('', connection);
+  }
+
+  private addDrawingItem(
+    itemId: string,
+    templateId: string,
+    posX: number,
+    posY: number,
+  ): ComponentRef<DrawingItem> {
+    if (typeof templateId !== 'string' || templateId.trim().length === 0) {
+      throw new Error('A non-empty templateId is required to add a drawing item.');
+    }
+
+    const drawingItemRef = this.drawingItems().createComponent(DrawingItem);
+    if (itemId) {
+      drawingItemRef.setInput('itemId', itemId);
+    }
+    drawingItemRef.setInput('templateHref', `#${templateId}`);
+    drawingItemRef.setInput('posX', posX);
+    drawingItemRef.setInput('posY', posY);
+    drawingItemRef.changeDetectorRef.detectChanges();
+    this.itemsStore.register(drawingItemRef);
+
+    return drawingItemRef;
+  }
+
+  private addConnector(connectionId: string, connection: Connection): ComponentRef<Connector> {
+    const connectorRef = this.drawingItems().createComponent(Connector);
+    if (connectionId) {
+      connectorRef.setInput('connectionId', connectionId);
+    }
+    connectorRef.setInput('connection', connection);
+    connectorRef.setInput('viewport', this.drawingViewport().nativeElement);
+    connectorRef.changeDetectorRef.detectChanges();
+    this.connectionStore.register(connection, connectorRef);
+
+    return connectorRef;
   }
 }

@@ -19,6 +19,12 @@
   font-size: 16px;
 }
 
+.entities-view__section-title {
+  margin: 24px 0 8px;
+  color: #53626d;
+  font-size: 14px;
+}
+
 .entities-view__table {
   width: 100%;
   border-collapse: collapse;
@@ -47,7 +53,7 @@
   cursor: pointer;
 }
 
-.entities-view__table th:nth-child(2),
-.entities-view__table td:nth-child(2) {
+.entities-view__table--items th:nth-child(2),
+.entities-view__table--items td:nth-child(2) {
   text-align: right;
 }

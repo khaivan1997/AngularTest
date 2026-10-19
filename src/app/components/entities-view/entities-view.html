@@ -1,10 +1,10 @@
 <aside class="entities-view" aria-label="Entities">
   <h2 class="entities-view__title">Entities</h2>
 
-  <table class="entities-view__table">
+  <table class="entities-view__table entities-view__table--items">
     <thead>
       <tr>
-        <!-- <th scope="col">ID</th> -->
+        <th scope="col">Item ID</th>
         <th scope="col">Quantity</th>
         <th scope="col">Name</th>
       </tr>
@@ -16,13 +16,42 @@
           [attr.aria-selected]="selectedTemplateIds().has(entity.id)"
           (click)="onEntityRowClick(entity.id)"
         >
-          <!-- <td>{{ entity.id }}</td> -->
+          <td>
+            @for (itemId of entity.itemIds; track itemId) {
+              <div>{{ itemId }}</div>
+            }
+          </td>
           <td>{{ entity.quantity }}</td>
           <td>{{ entity.name }}</td>
         </tr>
       } @empty {
         <tr>
-          <td colspan="2">No entities</td>
+          <td colspan="3">No entities</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <h3 class="entities-view__section-title">Connectors</h3>
+
+  <table class="entities-view__table entities-view__table--connectors">
+    <thead>
+      <tr>
+        <th scope="col">Connector</th>
+        <th scope="col">From</th>
+        <th scope="col">To</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (connection of connectionRows(); track connection.id) {
+        <tr>
+          <td>{{ connection.id }}</td>
+          <td>{{ connection.from.objectId }} / {{ connection.from.portId }}</td>
+          <td>{{ connection.to.objectId }} / {{ connection.to.portId }}</td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="3">No connectors</td>
         </tr>
       }
     </tbody>

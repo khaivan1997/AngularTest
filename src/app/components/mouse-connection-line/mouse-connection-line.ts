@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import {DrawingStore} from '../../store/drawing-store';
 import type {Connection, Endpoint, TemplatePortMetadata} from '../../model/utilities';
+import {ItemsStore} from '../../store/items-store';
 
 interface PortAtCursor {
   readonly element: SVGCircleElement;
@@ -35,6 +36,7 @@ interface PortConnectionState {
 })
 export class MouseConnectionLine implements AfterViewInit, OnDestroy {
   private readonly drawingStore = inject(DrawingStore);
+  private readonly itemsStore = inject(ItemsStore);
 
   public readonly svg = input.required<SVGSVGElement>();
   public readonly viewport = input.required<SVGGElement>();
@@ -209,7 +211,7 @@ export class MouseConnectionLine implements AfterViewInit, OnDestroy {
       return undefined;
     }
 
-    const port = this.drawingStore.getPort(objectId, portId);
+    const port = this.itemsStore.getPort(objectId, portId);
 
     if (!port) {
       return undefined;

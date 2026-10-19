@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { computed, inject, Injectable, signal, type ComponentRef } from '@angular/core';
+import type { Connector } from '../components/connector/connector';
 import type { DrawingItem } from '../components/drawing-item/drawing-item';
 import type { TemplatePortMetadata } from '../model/utilities';
 import {
@@ -8,17 +9,19 @@ import {
   createCurve as createCurvePath,
 } from '../util/math-util';
 import { snapTo } from '../util/numeric.util';
+import { ConnectionStore } from './connection-store';
+import { ItemsStore } from './items-store';
 import { TemplateStore } from './template-store';
 
 export type DrawingTool = 'select' | 'connect';
 export type GridMode = 'noGrid' | 'minorGrid' | 'majorGrid';
+export type SelectableElementRef = ComponentRef<DrawingItem> | ComponentRef<Connector>;
 
 @Injectable({ providedIn: 'root' })
 export class DrawingStore {
+  private readonly connectionStore = inject(ConnectionStore);
+  private readonly itemsStore = inject(ItemsStore);
   private readonly templateStore = inject(TemplateStore);
-  private readonly renderedEntities = signal<ReadonlyMap<string, ComponentRef<DrawingItem>>>(new Map());
-  readonly entities = computed(() => this.renderedEntities().values());
-  readonly signalSelectedEntities = signal<Set<ComponentRef<DrawingItem>>>(new Set());
   readonly activeTool = signal<DrawingTool>('select');
   readonly currentZoom = signal(1);
   readonly gridMode = signal<GridMode>('majorGrid');
@@ -33,46 +36,39 @@ export class DrawingStore {
     }
   });
 
-  register(entity: ComponentRef<DrawingItem>) {
-    this.renderedEntities.update((entities) => {
-      const nextEntities = new Map(entities);
-      nextEntities.set(entity.instance.itemId, entity);
-      return nextEntities;
-    });
+  setSelected(element: SelectableElementRef, selected: boolean, exclusive = true) {
+    if (selected && exclusive) {
+      this.itemsStore.selectedEntities.set(new Set());
+      this.connectionStore.signalSelectedConnections.set(new Set());
+    }
+
+    if (element.instance.type === 'item') {
+      this.itemsStore.setSelect(element as ComponentRef<DrawingItem>, selected);
+      return;
+    }
+
+    this.connectionStore.setSelect(element as ComponentRef<Connector>, selected);
   }
 
-  setSelect(entity: ComponentRef<DrawingItem>, selected = true) {
-    this.signalSelectedEntities.update((entities) => {
-      const nextEntities = new Set(entities);
+  selectAllItemByITemplateId(itemId: string, selected: boolean, exclusive = true) {
+    if (selected && exclusive) {
+      this.itemsStore.selectedEntities.set(new Set());
+      this.connectionStore.signalSelectedConnections.set(new Set());
+    }
 
-      if (selected) {
-        nextEntities.add(entity);
-      } else {
-        nextEntities.delete(entity);
-      }
-
-      return nextEntities;
-    });
+    this.itemsStore.selectAllItemByITemplateId(itemId, selected, false);
   }
 
-  selectAllById(itemId: string, selected: boolean) {
-    this.signalSelectedEntities.update((entities) => {
-      const nextEntities = new Set(entities);
+  deleteSelected() {
+    const selectedEntities = this.itemsStore.selectedEntities();
 
-      for (const entity of this.renderedEntities().values()) {
-        if (entity.instance.hrefId() !== itemId) {
-          continue;
-        }
+    this.connectionStore.deleteSelected();
 
-        if (selected) {
-          nextEntities.add(entity);
-        } else {
-          nextEntities.delete(entity);
-        }
-      }
+    for (const entity of selectedEntities) {
+      this.connectionStore.destroyForEntity(entity.instance.itemId());
+    }
 
-      return nextEntities;
-    });
+    this.itemsStore.deleteSelected();
   }
 
   setActiveTool(tool: DrawingTool) {
@@ -137,59 +133,4 @@ export class DrawingStore {
     );
   }
 
-  getEntity(itemId: string) {
-    return this.renderedEntities().get(itemId);
-  }
-
-  getPort(itemId: string, portId: string) {
-    const entity = this.renderedEntities().get(itemId);
-
-    if (!entity) {
-      return undefined;
-    }
-
-    return this.templateStore.getTemplate(entity.instance.hrefId())?.ports.find((port) => port.id === portId);
-  }
-
-  deregister(itemId: string) {
-    const entity = this.renderedEntities().get(itemId);
-
-    if (entity) {
-      this.renderedEntities.update((entities) => {
-        const nextEntities = new Map(entities);
-        nextEntities.delete(itemId);
-        return nextEntities;
-      });
-    }
-
-    const selectedEntity = [...this.signalSelectedEntities()].find(
-      (selected) => selected.instance.itemId === itemId,
-    );
-
-    if (selectedEntity) {
-      this.setSelect(selectedEntity, false);
-    }
-  }
-
-  deleteEntity(itemId: string) {
-    const entity = this.renderedEntities().get(itemId);
-
-    if (!entity) {
-      return;
-    }
-
-    this.deregister(itemId);
-    entity.destroy();
-  }
-
-  clear() {
-    const entities = [...this.renderedEntities().values()];
-
-    this.renderedEntities.set(new Map());
-    this.signalSelectedEntities.set(new Set());
-
-    for (const entity of entities) {
-      entity.destroy();
-    }
-  }
 }
