@@ -83,7 +83,7 @@ export class Connector {
 
     return {
       entity: entity.instance,
-      transformPosition: entity.instance.currentTransformPosition(),
+      transformPosition: entity.instance.getCurrentTransformPosition(),
     };
   }
 

@@ -41,10 +41,35 @@ export class EntitiesView {
     return selectedTemplateIds;
   });
 
+  protected readonly selectedConnectionIds = computed(() => {
+    const selectedConnections = this.connectionStore.signalSelectedConnections();
+    const selectedConnectionIds = new Set<string>();
+
+    for (const [connectionId, connection] of this.connectionStore.connectionEntries()) {
+      if (selectedConnections.has(connection.componentRef)) {
+        selectedConnectionIds.add(connectionId);
+      }
+    }
+
+    return selectedConnectionIds;
+  });
+
   protected onEntityRowClick(itemId: string): void {
     const selected = !this.selectedTemplateIds().has(itemId);
 
     this.drawingStore.selectAllItemByITemplateId(itemId, selected);
+  }
+
+  protected onConnectionRowClick(connectionId: string): void {
+    const connection = this.connectionStore.getEntity(connectionId);
+
+    if (!connection) {
+      return;
+    }
+
+    const selected = !this.connectionStore.signalSelectedConnections().has(connection.componentRef);
+
+    this.drawingStore.setSelected(connection.componentRef, selected, true);
   }
 
   protected readonly entityRows = computed<readonly EntityRow[]>(() => {

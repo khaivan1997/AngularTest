@@ -23,6 +23,27 @@ export interface Connection {
   readonly to: Endpoint;
 }
 
+export interface DrawingItemExport {
+  readonly itemId: string;
+  readonly templateRefId: string;
+  readonly transform: {
+    readonly position: {
+      readonly x: number;
+      readonly y: number;
+    };
+  };
+}
+
+export interface DrawingConnectionExport {
+  readonly connectionId: string;
+  readonly connection: Connection;
+}
+
+export interface DrawingExportObject {
+  readonly items: readonly DrawingItemExport[];
+  readonly connections: readonly DrawingConnectionExport[];
+}
+
 export const GRID_MINOR = {
   tileWidth: 10,
   tileHeight: 10,

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {computed, inject, Injectable, signal, type ComponentRef} from '@angular/core';
 import type {DrawingItem} from '../components/drawing-item/drawing-item';
+import type {DrawingItemExport} from '../model/utilities';
 import {TemplateStore} from './template-store';
 
 @Injectable({providedIn: 'root'})
@@ -58,6 +59,23 @@ export class ItemsStore {
 
   getEntity(itemId: string) {
     return this.renderedEntities().get(itemId);
+  }
+
+  getExportObject(): readonly DrawingItemExport[] {
+    return [...this.renderedEntities()].map(([itemId, entity]) => {
+      const {position} = entity.instance.getCurrentTransformPosition();
+
+      return {
+        itemId,
+        templateRefId: entity.instance.hrefId(),
+        transform: {
+          position: {
+            x: position.x,
+            y: position.y,
+          },
+        },
+      };
+    });
   }
 
   getPort(itemId: string, portId: string) {

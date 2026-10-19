@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {computed, Injectable, signal, type ComponentRef} from '@angular/core';
 import type {Connector} from '../components/connector/connector';
-import type {Connection} from '../model/utilities';
+import type {Connection, DrawingConnectionExport} from '../model/utilities';
 
 interface RenderedConnection {
   readonly connectionObj: Connection;
@@ -49,6 +49,16 @@ export class ConnectionStore {
 
   getEntity(connectionId: string) {
     return this.renderedConnections().get(connectionId);
+  }
+
+  getExportObject(): readonly DrawingConnectionExport[] {
+    return [...this.renderedConnections()].map(([connectionId, {connectionObj}]) => ({
+      connectionId,
+      connection: {
+        from: {...connectionObj.from},
+        to: {...connectionObj.to},
+      },
+    }));
   }
 
   deleteSelected() {

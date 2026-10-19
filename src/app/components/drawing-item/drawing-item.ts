@@ -75,7 +75,6 @@ export class DrawingItem implements AfterViewInit {
   );
   protected readonly bounds = signal<DrawingItemBounds | null>(null);
   protected readonly positionTransform = computed(() => `translate(${this.posX()} ${this.posY()})`);
-  public readonly currentTransformPosition = computed(() => this.getCurrentTransformPosition());
   private readonly templateUse = viewChild.required<ElementRef<SVGUseElement>>('templateUse');
   private readonly portElements = viewChildren<ElementRef<SVGCircleElement>>('drawingPort');
   private pointerDrag: PointerDragState | null = null;

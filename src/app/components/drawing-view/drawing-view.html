@@ -33,6 +33,20 @@
     >
       Clear
     </button>
+    <button
+      type="button"
+      class="drawing-view__tool-button"
+      (click)="onImport()"
+    >
+      Import
+    </button>
+    <button
+      type="button"
+      class="drawing-view__tool-button"
+      (click)="onExport()"
+    >
+      Export
+    </button>
   </div>
 
   <span class="drawing-view__zoom-label">Current zoom: {{ zoomLabel() }}</span>

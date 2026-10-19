@@ -9,7 +9,7 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import type {Connection} from '../../model/utilities';
+import type {Connection, DrawingExportObject} from '../../model/utilities';
 import { ConnectionStore } from '../../store/connection-store';
 import { DrawingStore, type GridMode } from '../../store/drawing-store';
 import { ItemsStore } from '../../store/items-store';
@@ -80,6 +80,48 @@ export class DrawingView {
 
   protected onConnectTool(): void {
     this.drawingStore.setActiveTool('connect');
+  }
+
+  public getExportObject(): DrawingExportObject {
+    return {
+      items: this.itemsStore.getExportObject(),
+      connections: this.connectionStore.getExportObject(),
+    };
+  }
+
+  protected onImport(): void {
+    const drawingText = window.prompt('Import drawing', '');
+
+    if (drawingText === null) {
+      return;
+    }
+
+    const drawing = JSON.parse(drawingText) as DrawingExportObject;
+
+    for (const item of drawing.items) {
+      this.addDrawingItem(
+        item.itemId,
+        item.templateRefId,
+        item.transform.position.x,
+        item.transform.position.y,
+      );
+    }
+
+    for (const connection of drawing.connections) {
+      this.addConnector(connection.connectionId, connection.connection);
+    }
+  }
+
+  protected async onExport(): Promise<void> {
+    const drawingText = JSON.stringify(this.getExportObject(), null, 2);
+    console.log('Drawing export', drawingText);
+
+    try {
+      await navigator.clipboard.writeText(drawingText);
+      console.log('Drawing export copied to clipboard', drawingText);
+    } catch (error) {
+      console.error('Unable to copy drawing export to clipboard', error);
+    }
   }
 
   protected onWheel(event: WheelEvent): void {

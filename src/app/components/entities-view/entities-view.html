@@ -44,7 +44,11 @@
     </thead>
     <tbody>
       @for (connection of connectionRows(); track connection.id) {
-        <tr>
+        <tr
+          [class.selected]="selectedConnectionIds().has(connection.id)"
+          [attr.aria-selected]="selectedConnectionIds().has(connection.id)"
+          (click)="onConnectionRowClick(connection.id)"
+        >
           <td>{{ connection.id }}</td>
           <td>{{ connection.from.objectId }} / {{ connection.from.portId }}</td>
           <td>{{ connection.to.objectId }} / {{ connection.to.portId }}</td>
