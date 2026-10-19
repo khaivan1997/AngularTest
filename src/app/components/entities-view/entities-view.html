@@ -1,1 +1,26 @@
-<aside class="entities-view" aria-label="Entities"></aside>
+<aside class="entities-view" aria-label="Entities">
+  <h2 class="entities-view__title">Entities</h2>
+
+  <table class="entities-view__table">
+    <thead>
+      <tr>
+        <!-- <th scope="col">ID</th> -->
+        <th scope="col">Quantity</th>
+        <th scope="col">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (entity of entityRows(); track entity.id) {
+        <tr>
+          <!-- <td>{{ entity.id }}</td> -->
+          <td>{{ entity.quantity }}</td>
+          <td>{{ entity.name }}</td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="2">No entities</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</aside>

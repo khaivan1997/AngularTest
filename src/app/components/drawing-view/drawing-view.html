@@ -1,4 +1,42 @@
 <div class="drawing-view__toolbar" role="toolbar" aria-label="Drawing options">
+  <div class="drawing-view__tools" aria-label="Drawing tools">
+    <button
+      type="button"
+      class="drawing-view__tool-button"
+      [class.is-active]="activeTool() === 'select'"
+      [attr.aria-pressed]="activeTool() === 'select'"
+      (click)="onSelectTool()"
+    >
+      Select
+    </button>
+    <button
+      type="button"
+      class="drawing-view__tool-button"
+      [class.is-active]="activeTool() === 'connect'"
+      [attr.aria-pressed]="activeTool() === 'connect'"
+      (click)="onConnectTool()"
+    >
+      Connect
+    </button>
+    <button
+      type="button"
+      class="drawing-view__tool-button drawing-view__tool-button--delete"
+      [disabled]="!selectedEntity()"
+      (click)="onDelete()"
+    >
+      Delete
+    </button>
+    <button
+      type="button"
+      class="drawing-view__tool-button drawing-view__tool-button--delete"
+      (click)="onClear()"
+    >
+      Clear
+    </button>
+  </div>
+
+  <span class="drawing-view__zoom-label">Current zoom: {{ zoomLabel() }}</span>
+
   <div class="toggle-bar">
     <label class="select-box__label" for="grid-mode">Grid</label>
     <select
@@ -16,6 +54,7 @@
 
 <div class="drawing-view__canvas">
   <svg
+    #drawingSvg
     class="drawing-view__svg"
     aria-label="Drawing"
     [attr.width]="drawingWidth"
@@ -23,14 +62,24 @@
     [attr.viewBox]="drawingViewBox"
     [style.width.px]="drawingWidth"
     [style.height.px]="drawingHeight"
+    [style.cursor]="svgCursor()"
+    (dragover)="onDragOver($event)"
+    (drop)="onDrop($event)"
+    (wheel)="onWheel($event)"
   >
-    @if (gridFill(); as fill) {
-      <rect
-        class="drawing-view__grid"
-        [attr.width]="drawingWidth"
-        [attr.height]="drawingHeight"
-        [attr.fill]="fill"
-      ></rect>
-    }
+    <g #drawingViewport [attr.transform]="drawingTransform()">
+      @if (gridFill(); as fill) {
+        <rect
+          class="drawing-view__grid"
+          [attr.x]="gridX"
+          [attr.y]="gridY"
+          [attr.width]="gridWidth"
+          [attr.height]="gridHeight"
+          [attr.fill]="fill"
+        ></rect>
+      }
+
+      <ng-container #drawingItems></ng-container>
+    </g>
   </svg>
 </div>

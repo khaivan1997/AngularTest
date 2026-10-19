@@ -25,6 +25,7 @@ export interface TemplateMetadata {
   readonly id: PredefinedTemplateId;
   readonly name: string;
   readonly category: string;
+  readonly viewBox: string;
   readonly articleNumber?: string;
   readonly description?: string;
 }
@@ -34,90 +35,105 @@ const PREDEFINED_TEMPLATE_METADATA = [
     id: PREDEFINED_TEMPLATE_IDS.entnahmestelleAmProzessrohr,
     name: 'Entnahmestelle am Prozessrohr',
     category: 'Prozessanschluss',
+    viewBox: '-8.02 -8.02 22.04 16.04',
     description: 'Entnahmestelle am Prozessrohr',
   },
   {
     id: PREDEFINED_TEMPLATE_IDS.prozessleitungSchnitt,
     name: 'Prozessleitung (Schnitt)',
     category: 'Prozessanschluss',
+    viewBox: '-30.74 -6.24 61.48 24.48',
     description: 'Prozessleitung im Schnitt',
   },
   {
     id: PREDEFINED_TEMPLATE_IDS.behaelterstutzenMitFlansch,
     name: 'Behälterstutzen mit Flansch',
     category: 'Prozessanschluss',
+    viewBox: '-26.1 -14.1 52.2 20.7',
     description: 'Behälterstutzen mit Flanschanschluss',
   },
   {
     id: PREDEFINED_TEMPLATE_IDS.doppelabsperrventil,
     name: 'Doppelabsperrventil',
     category: 'Armaturen',
+    viewBox: '-16.82 -8.82 33.64 15.64',
     articleNumber: 'S004.60.220.13',
   },
   {
     id: PREDEFINED_TEMPLATE_IDS.absperrventilOd12,
     name: 'Absperrventil OD12',
     category: 'Armaturen',
+    viewBox: '-9.86 -7.86 19.72 12.72',
     articleNumber: 'AV-OD12-PN400',
   },
   {
     id: PREDEFINED_TEMPLATE_IDS.absperrventilOd6,
     name: 'Absperrventil OD6',
     category: 'Armaturen',
+    viewBox: '-9.86 -7.86 19.72 12.72',
     articleNumber: 'AV-OD6-PN400',
   },
   {
     id: PREDEFINED_TEMPLATE_IDS.ablassventil,
     name: 'Ablassventil',
     category: 'Armaturen',
+    viewBox: '-9.924 -7.924 20.648 12.848',
     articleNumber: 'ABV-G12',
   },
   {
     id: PREDEFINED_TEMPLATE_IDS.ventilblockMitPruefanschluss,
     name: 'Ventilblock mit Prüfanschluss',
     category: 'Armaturen',
+    viewBox: '-7.884 -9.884 20.068 19.768',
     articleNumber: 'VB1-PA-M20',
   },
   {
     id: PREDEFINED_TEMPLATE_IDS.wassersackrohrUForm,
     name: 'Wassersackrohr U-Form',
     category: 'Rohr & Verschraubungen',
+    viewBox: '-7.36 -11.86 14.72 19.72',
     articleNumber: 'WSR-U-OD12',
   },
   {
     id: PREDEFINED_TEMPLATE_IDS.geradeRohrverschraubung,
     name: 'Gerade Rohrverschraubung',
     category: 'Rohr & Verschraubungen',
+    viewBox: '-6.38 -3.58 12.76 7.16',
     articleNumber: 'RV-G-OD12-S',
   },
   {
     id: PREDEFINED_TEMPLATE_IDS.flanschverbindungDn80,
     name: 'Flanschverbindung DN80',
     category: 'Rohr & Verschraubungen',
+    viewBox: '-10.44 -5.44 20.88 10.88',
     articleNumber: 'FD-DN80-PN40',
   },
   {
     id: PREDEFINED_TEMPLATE_IDS.cerabarPmp71b,
     name: 'Cerabar PMP71B',
     category: 'Messumformer (E+H)',
+    viewBox: '-9.26 -12.26 18.52 25.52',
     articleNumber: 'PMP71B',
   },
   {
     id: PREDEFINED_TEMPLATE_IDS.einschweissSchutzrohr,
     name: 'Einschweiß-Schutzrohr',
     category: 'Temperatur',
+    viewBox: '-6.36 -7.86 12.72 19.72',
     articleNumber: 'SR-ES-14571',
   },
   {
     id: PREDEFINED_TEMPLATE_IDS.thermometerIthermTm411,
     name: 'Thermometer iTHERM TM411',
     category: 'Temperatur',
+    viewBox: '-9.26 -23.26 21.52 25.52',
     articleNumber: 'TM411',
   },
   {
     id: PREDEFINED_TEMPLATE_IDS.micropilotFmr62,
     name: 'Micropilot FMR62',
     category: 'Füllstand',
+    viewBox: '-11.78 -21.78 25.56 33.06',
     articleNumber: 'FMR62',
   },
 ] as const satisfies readonly TemplateMetadata[];

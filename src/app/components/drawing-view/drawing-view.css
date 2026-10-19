@@ -23,11 +23,47 @@
 .drawing-view__toolbar {
   display: flex;
   flex: 0 0 auto;
+  align-items: center;
+  gap: 16px;
   justify-content: flex-end;
   width: 100%;
   padding: 8px 12px;
   background: #f7f9fb;
   border-bottom: 1px solid #d8e0e7;
+}
+
+.drawing-view__tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: auto;
+}
+
+.drawing-view__tool-button {
+  padding: 5px 10px;
+  color: #203038;
+  background: #fff;
+  border: 1px solid #bdc9d2;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.drawing-view__tool-button.is-active {
+  color: #0b5cad;
+  background: #e7f2ff;
+  border-color: #6aa9e8;
+}
+
+.drawing-view__tool-button--delete:disabled {
+  color: #9aa6ae;
+  background: #eef1f3;
+  cursor: not-allowed;
+}
+
+.drawing-view__zoom-label {
+  color: #53626d;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .toggle-bar {
@@ -67,4 +103,5 @@
   display: block;
   flex: 0 0 auto;
   background: #fff;
+  overscroll-behavior: none;
 }

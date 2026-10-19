@@ -1,0 +1,24 @@
+<svg:rect
+  class="drawing-item__hit"
+  fill="transparent"
+  pointer-events="all"
+  [attr.x]="bounds()?.x"
+  [attr.y]="bounds()?.y"
+  [attr.width]="bounds()?.width"
+  [attr.height]="bounds()?.height"
+></svg:rect>
+<svg:use #templateUse [attr.href]="templateHref()"></svg:use>
+@if (isVisuallySelected()) {
+  <svg:rect
+    class="drawing-item__selection"
+    fill="none"
+    stroke="#1976d2"
+    stroke-dasharray="3 2"
+    vector-effect="non-scaling-stroke"
+    pointer-events="none"
+    [attr.x]="bounds()?.x"
+    [attr.y]="bounds()?.y"
+    [attr.width]="bounds()?.width"
+    [attr.height]="bounds()?.height"
+  ></svg:rect>
+}

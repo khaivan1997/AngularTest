@@ -13,4 +13,15 @@ import { TemplateStore } from '../../store/template-store';
 export class TemplateView {
   protected readonly templateStore = inject(TemplateStore);
   protected readonly templates = this.templateStore.templates;
+
+  protected onDragStart(event: DragEvent, templateId: string): void {
+    const dataTransfer = event.dataTransfer;
+
+    if (!dataTransfer) {
+      return;
+    }
+
+    dataTransfer.effectAllowed = 'copy';
+    dataTransfer.setData('application/x-template-id', templateId);
+  }
 }
