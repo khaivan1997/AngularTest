@@ -113,12 +113,12 @@ export class DrawingView {
   }
 
   protected async onExport(): Promise<void> {
-    const drawingText = JSON.stringify(this.getExportObject(), null, 2);
-    console.log('Drawing export', drawingText);
+    const drawingExport = this.getExportObject();
+    const drawingText = JSON.stringify(drawingExport);
 
     try {
+      console.log('Drawing export copied to clipboard', drawingExport);
       await navigator.clipboard.writeText(drawingText);
-      console.log('Drawing export copied to clipboard', drawingText);
     } catch (error) {
       console.error('Unable to copy drawing export to clipboard', error);
     }
