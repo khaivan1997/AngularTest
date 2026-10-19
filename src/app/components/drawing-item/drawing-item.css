@@ -1,0 +1,18 @@
+:host .drawing-item__selection {
+  fill: none;
+  stroke: #1976d2;
+  stroke-dasharray: 3 2;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+:host .drawing-item__port {
+  fill: #fff;
+  stroke: #1976d2;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+:host .drawing-item__port.is-electrical {
+  stroke: #7b61ff;
+}

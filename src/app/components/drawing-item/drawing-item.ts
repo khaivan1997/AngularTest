@@ -12,6 +12,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { DrawingStore } from '../../store/drawing-store';
+import { TemplateStore } from '../../store/template-store';
 
 interface DrawingItemBounds {
   readonly x: number;
@@ -34,6 +35,7 @@ interface PointerDragState {
   selector: 'g[drawing-item]',
   standalone: true,
   templateUrl: './drawing-item.html',
+  styleUrl: './drawing-item.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[attr.transform]': 'positionTransform()',
@@ -42,6 +44,7 @@ interface PointerDragState {
 })
 export class DrawingItem implements AfterViewInit {
   private readonly drawingStore = inject(DrawingStore);
+  private readonly templateStore = inject(TemplateStore);
   private readonly hostElement = inject<ElementRef<SVGGElement>>(ElementRef);
 
   public readonly itemId = crypto.randomUUID();
@@ -51,11 +54,15 @@ export class DrawingItem implements AfterViewInit {
 
     return href.startsWith('#') ? href.slice(1) : href;
   });
+  protected readonly ports = computed(() => this.templateStore.getTemplate(this.hrefId())?.ports ?? []);
   protected readonly posX = model.required<number>();
   protected readonly posY = model.required<number>();
   protected readonly currentEntity = computed(() => this.drawingStore.getEntity(this.itemId));
   protected readonly isVisuallySelected = computed(
     () => this.drawingStore.signalSelectedEntity() === this.currentEntity(),
+  );
+  protected readonly arePortsVisible = computed(
+    () => this.isVisuallySelected() || this.drawingStore.activeTool() === 'connect',
   );
   protected readonly bounds = signal<DrawingItemBounds | null>(null);
   protected readonly positionTransform = computed(() => `translate(${this.posX()} ${this.posY()})`);
