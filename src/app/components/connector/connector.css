@@ -25,3 +25,11 @@
   vector-effect: non-scaling-stroke;
   pointer-events: stroke;
 }
+
+:host .connector__control-point {
+  fill: #fff;
+  stroke: #1976d2;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}

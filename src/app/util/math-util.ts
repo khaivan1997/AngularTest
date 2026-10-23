@@ -54,7 +54,62 @@ export function getMidpoint(firstPoint: DOMPoint, secondPoint: DOMPoint): DOMPoi
   );
 }
 
-export function createCurve(
+export interface CurvePoints {
+  readonly midpoint: DOMPoint;
+  readonly fromControlPoint: DOMPoint;
+  readonly destinationControlPoint: DOMPoint;
+}
+
+export function calculateCurvePoints(
+  fromStart: DOMPoint,
+  fromEnd: DOMPoint,
+  destinationStart: DOMPoint,
+  destinationEnd: DOMPoint,
+  gridUnit = 10,
+  curveScale = 2,
+): CurvePoints {
+  const midpoint = getMidpoint(fromEnd, destinationEnd);
+  const fromControlPoint = calculateCurveControlPoint(
+    fromStart,
+    fromEnd,
+    midpoint,
+    gridUnit,
+    curveScale,
+  );
+  const destinationControlPoint = calculateCurveControlPoint(
+    destinationStart,
+    destinationEnd,
+    midpoint,
+    gridUnit,
+    curveScale,
+  );
+
+  return {
+    midpoint,
+    fromControlPoint,
+    destinationControlPoint,
+  };
+}
+
+export function createCurvePathFromPoints(
+  fromStart: DOMPoint,
+  fromEnd: DOMPoint,
+  destinationStart: DOMPoint,
+  destinationEnd: DOMPoint,
+  {midpoint, fromControlPoint, destinationControlPoint}: CurvePoints,
+): string {
+  return (
+    `M ${fromStart.x} ${fromStart.y} ` +
+    `L ${fromEnd.x} ${fromEnd.y} ` +
+    `Q ${fromControlPoint.x} ${fromControlPoint.y} ` +
+    `${midpoint.x} ${midpoint.y} ` +
+    `Q ${destinationControlPoint.x} ${destinationControlPoint.y} ` +
+    `${destinationEnd.x} ${destinationEnd.y} ` +
+    `L ${destinationStart.x} ${destinationStart.y}`
+  );
+}
+
+export function createCurvePath(
   fromStart: DOMPoint,
   fromEnd: DOMPoint,
   destinationStart: DOMPoint,
@@ -62,29 +117,20 @@ export function createCurve(
   gridUnit = 10,
   curveScale = 2,
 ): string {
-  const curveEndPoint = getMidpoint(fromEnd, destinationEnd);
-  const firstControlPoint = calculateCurveControlPoint(
+  const curvePoints = calculateCurvePoints(
     fromStart,
     fromEnd,
-    curveEndPoint,
-    gridUnit,
-    curveScale,
-  );
-  const secondControlPoint = calculateCurveControlPoint(
     destinationStart,
     destinationEnd,
-    curveEndPoint,
     gridUnit,
     curveScale,
   );
 
-  return (
-    `M ${fromStart.x} ${fromStart.y} ` +
-    `L ${fromEnd.x} ${fromEnd.y} ` +
-    `Q ${firstControlPoint.x} ${firstControlPoint.y} ` +
-    `${curveEndPoint.x} ${curveEndPoint.y} ` +
-    `Q ${secondControlPoint.x} ${secondControlPoint.y} ` +
-    `${destinationEnd.x} ${destinationEnd.y} ` +
-    `L ${destinationStart.x} ${destinationStart.y}`
+  return createCurvePathFromPoints(
+    fromStart,
+    fromEnd,
+    destinationStart,
+    destinationEnd,
+    curvePoints,
   );
 }

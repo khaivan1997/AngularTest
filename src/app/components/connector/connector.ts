@@ -4,6 +4,14 @@ import {ConnectionStore} from '../../store/connection-store';
 import {ItemsStore} from '../../store/items-store';
 import type {DrawingItem} from '../drawing-item/drawing-item';
 import {DrawingStore} from '../../store/drawing-store';
+import type {CurvePoints} from '../../util/math-util';
+
+interface CurvePathInput {
+  readonly fromStart: DOMPoint;
+  readonly fromEnd: DOMPoint;
+  readonly destinationStart: DOMPoint;
+  readonly destinationEnd: DOMPoint;
+}
 
 @Component({
   selector: 'g[connector]',
@@ -31,22 +39,7 @@ export class Connector {
     return entity ? this.connectionStore.signalSelectedConnections().has(entity.componentRef) : false;
   });
 
-  @HostListener('click')
-  protected toggleSelected(): void {
-    if (this.drawingStore.activeTool() !== 'select') {
-      return;
-    }
-
-    const entity = this.currentEntity();
-
-    if (!entity) {
-      return;
-    }
-
-    this.drawingStore.setSelected(entity.componentRef, !this.isSelected());
-  }
-
-  protected readonly path = computed(() => {
+  private readonly curvePathInput = computed(() => {
     const connection = this.connection();
     const fromEntity = this.getEntityWithTransform(connection.from);
     const toEntity = this.getEntityWithTransform(connection.to);
@@ -65,13 +58,71 @@ export class Connector {
         return null;
       }
 
-      return this.drawingStore.createCurve(
-        fromPosition,
-        this.drawingStore.getPortEndPosition(fromPort, fromPosition),
-        toPosition,
-        this.drawingStore.getPortEndPosition(toPort, toPosition),
-      );
+      return {
+        fromStart: fromPosition,
+        fromEnd: this.drawingStore.getPortEndPosition(fromPort, fromPosition),
+        destinationStart: toPosition,
+        destinationEnd: this.drawingStore.getPortEndPosition(toPort, toPosition),
+      } satisfies CurvePathInput;
     });
+  });
+
+  private readonly curvePoints = computed(() => {
+    const curvePathInput = this.curvePathInput();
+
+    if (!curvePathInput) {
+      return null;
+    }
+
+    return this.drawingStore.calculateCurvePoints(
+      curvePathInput.fromStart,
+      curvePathInput.fromEnd,
+      curvePathInput.destinationStart,
+      curvePathInput.destinationEnd,
+    );
+  });
+
+  protected readonly fromControlPoint = computed(() => this.curvePoints()?.fromControlPoint ?? null);
+  protected readonly destinationControlPoint = computed(() => this.curvePoints()?.destinationControlPoint ?? null);
+
+  @HostListener('click')
+  protected toggleSelected(): void {
+    if (this.drawingStore.activeTool() !== 'select') {
+      return;
+    }
+
+    const entity = this.currentEntity();
+
+    if (!entity) {
+      return;
+    }
+
+    this.drawingStore.setSelected(entity.componentRef, !this.isSelected());
+  }
+
+  protected readonly path = computed(() => {
+    const curvePathInput = this.curvePathInput();
+    const curvePoints = this.curvePoints();
+    const fromControlPoint = this.fromControlPoint();
+    const destinationControlPoint = this.destinationControlPoint();
+
+    if (!curvePathInput || !curvePoints || !fromControlPoint || !destinationControlPoint) {
+      return null;
+    }
+
+    const pathPoints: CurvePoints = {
+      midpoint: curvePoints.midpoint,
+      fromControlPoint,
+      destinationControlPoint,
+    };
+
+    return this.drawingStore.createCurvePathFromPoints(
+      curvePathInput.fromStart,
+      curvePathInput.fromEnd,
+      curvePathInput.destinationStart,
+      curvePathInput.destinationEnd,
+      pathPoints,
+    );
   });
 
   private getEntityWithTransform(endpoint: Endpoint) {

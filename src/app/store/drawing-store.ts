@@ -5,9 +5,12 @@ import type { DrawingItem } from '../components/drawing-item/drawing-item';
 import type { TemplatePortMetadata } from '../model/utilities';
 import {
   calculateCurveControlPoint,
+  calculateCurvePoints as calculateCurvePointsUtil,
   calculatePortEndPosition,
-  createCurve as createCurvePath,
+  createCurvePath,
+  createCurvePathFromPoints as createCurvePathFromPointsUtil,
 } from '../util/math-util';
+import type { CurvePoints } from '../util/math-util';
 import { snapTo } from '../util/numeric.util';
 import { ConnectionStore } from './connection-store';
 import { ItemsStore } from './items-store';
@@ -115,6 +118,37 @@ export class DrawingStore {
       curvePoint,
       destinationPoint,
       this.getGridUnit() ?? 10,
+    );
+  }
+
+  calculateCurvePoints(
+    fromStart: DOMPoint,
+    fromEnd: DOMPoint,
+    destinationStart: DOMPoint,
+    destinationEnd: DOMPoint,
+  ) {
+    return calculateCurvePointsUtil(
+      fromStart,
+      fromEnd,
+      destinationStart,
+      destinationEnd,
+      this.getGridUnit() ?? 10,
+    );
+  }
+
+  createCurvePathFromPoints(
+    fromStart: DOMPoint,
+    fromEnd: DOMPoint,
+    destinationStart: DOMPoint,
+    destinationEnd: DOMPoint,
+    curvePoints: CurvePoints,
+  ) {
+    return createCurvePathFromPointsUtil(
+      fromStart,
+      fromEnd,
+      destinationStart,
+      destinationEnd,
+      curvePoints,
     );
   }
 

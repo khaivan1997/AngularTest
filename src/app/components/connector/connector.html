@@ -2,6 +2,22 @@
   <svg:path class="connector__path" [attr.d]="pathValue"></svg:path>
   @if (isSelected()) {
     <svg:path class="connector__glow" [attr.d]="pathValue"></svg:path>
+    @if (fromControlPoint(); as fromControlPoint) {
+      <svg:circle
+        class="connector__control-point"
+        [attr.cx]="fromControlPoint.x"
+        [attr.cy]="fromControlPoint.y"
+        r="2"
+      ></svg:circle>
+    }
+    @if (destinationControlPoint(); as destinationControlPoint) {
+      <svg:circle
+        class="connector__control-point"
+        [attr.cx]="destinationControlPoint.x"
+        [attr.cy]="destinationControlPoint.y"
+        r="2"
+      ></svg:circle>
+    }
   }
   <svg:path class="connector__hit" [attr.d]="pathValue"></svg:path>
 }
