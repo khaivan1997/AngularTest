@@ -1,5 +1,6 @@
 @if (path(); as pathValue) {
   <svg:path class="connector__path" [attr.d]="pathValue"></svg:path>
+  <svg:path class="connector__hit" [attr.d]="pathValue"></svg:path>
   @if (isSelected()) {
     <svg:path class="connector__glow" [attr.d]="pathValue"></svg:path>
     @if (fromControlPoint(); as fromControlPoint) {
@@ -23,5 +24,4 @@
       ></svg:circle>
     }
   }
-  <svg:path class="connector__hit" [attr.d]="pathValue"></svg:path>
 }
