@@ -85,7 +85,7 @@ export class DrawingStore {
 
     const activeTool = this.activeTool();
 
-    return activeTool === 'select' && event.ctrlKey ? 'move' : activeTool;
+    return activeTool === 'select' && (event.ctrlKey || event.metaKey) ? 'move' : activeTool;
   }
 
   setCurrentZoom(zoom: number) {

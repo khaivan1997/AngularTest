@@ -240,6 +240,12 @@ export class DrawingView {
     }
   }
 
+  protected onContextMenu(event: MouseEvent): void {
+    if (this.drawingStore.activeTool() === 'select' && (event.ctrlKey || event.metaKey)) {
+      event.preventDefault();
+    }
+  }
+
   protected onDelete(): void {
     const selectedEntities = this.selectedEntities();
     const selectedConnections = this.connectionStore.signalSelectedConnections();
