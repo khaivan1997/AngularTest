@@ -52,13 +52,14 @@ export class ConnectionStore {
   }
 
   getExportObject(): readonly DrawingConnectionExport[] {
-    return [...this.renderedConnections()].map(([connectionId, {connectionObj}]) => ({
-      connectionId,
-      connection: {
-        from: {...connectionObj.from},
-        to: {...connectionObj.to},
-      },
-    }));
+    return [...this.renderedConnections()].map(([connectionId, {componentRef}]) => {
+      const connectionExport = componentRef.instance.getConnectionExport();
+
+      return {
+        connectionId,
+        ...connectionExport,
+      };
+    });
   }
 
   deleteSelected() {

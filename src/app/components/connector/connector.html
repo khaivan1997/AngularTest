@@ -7,7 +7,9 @@
         class="connector__control-point"
         [attr.cx]="fromControlPoint.x"
         [attr.cy]="fromControlPoint.y"
-        r="2"
+        (pointerdown)="onControlPointPointerDown($event, 'from')"
+        (click)="$event.stopPropagation()"
+        r="2.4"
       ></svg:circle>
     }
     @if (destinationControlPoint(); as destinationControlPoint) {
@@ -15,7 +17,9 @@
         class="connector__control-point"
         [attr.cx]="destinationControlPoint.x"
         [attr.cy]="destinationControlPoint.y"
-        r="2"
+        (pointerdown)="onControlPointPointerDown($event, 'destination')"
+        (click)="$event.stopPropagation()"
+        r="2.4"
       ></svg:circle>
     }
   }

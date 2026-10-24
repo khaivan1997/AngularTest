@@ -27,9 +27,10 @@
 }
 
 :host .connector__control-point {
-  fill: #fff;
-  stroke: #1976d2;
+  fill: #e8f5e9;
+  stroke: #2e7d32;
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
-  pointer-events: none;
+  pointer-events: all;
+  cursor: grab;
 }

@@ -18,9 +18,21 @@ export interface Endpoint {
   readonly portId: string;
 }
 
+export interface ConnectionControlPoints {
+  readonly pos1X: number;
+  readonly pos1Y: number;
+  readonly pos2X: number;
+  readonly pos2Y: number;
+}
+
 export interface Connection {
   readonly from: Endpoint;
   readonly to: Endpoint;
+}
+
+export interface ConnectionExport {
+  readonly connection: Connection;
+  readonly controlPoints: ConnectionControlPoints;
 }
 
 export interface DrawingItemExport {
@@ -34,9 +46,8 @@ export interface DrawingItemExport {
   };
 }
 
-export interface DrawingConnectionExport {
+export interface DrawingConnectionExport extends ConnectionExport {
   readonly connectionId: string;
-  readonly connection: Connection;
 }
 
 export interface DrawingExportObject {

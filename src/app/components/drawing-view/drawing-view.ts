@@ -9,7 +9,7 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import type {Connection, DrawingExportObject} from '../../model/utilities';
+import type {Connection, ConnectionControlPoints, DrawingExportObject} from '../../model/utilities';
 import { ConnectionStore } from '../../store/connection-store';
 import { DrawingStore, type GridMode } from '../../store/drawing-store';
 import { ItemsStore } from '../../store/items-store';
@@ -108,7 +108,11 @@ export class DrawingView {
     }
 
     for (const connection of drawing.connections) {
-      this.addConnector(connection.connectionId, connection.connection);
+      this.addConnector(
+        connection.connectionId,
+        connection.connection,
+        connection.controlPoints,
+      );
     }
   }
 
@@ -239,12 +243,17 @@ export class DrawingView {
     return drawingItemRef;
   }
 
-  private addConnector(connectionId: string, connection: Connection): ComponentRef<Connector> {
+  private addConnector(
+    connectionId: string,
+    connection: Connection,
+    controlPoints: ConnectionControlPoints | null = null,
+  ): ComponentRef<Connector> {
     const connectorRef = this.drawingItems().createComponent(Connector);
     if (connectionId) {
       connectorRef.setInput('connectionId', connectionId);
     }
     connectorRef.setInput('connection', connection);
+    connectorRef.setInput('controlPoints', controlPoints);
     connectorRef.setInput('viewport', this.drawingViewport().nativeElement);
     connectorRef.changeDetectorRef.detectChanges();
     this.connectionStore.register(connection, connectorRef);
