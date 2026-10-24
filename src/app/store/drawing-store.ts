@@ -16,7 +16,7 @@ import { ConnectionStore } from './connection-store';
 import { ItemsStore } from './items-store';
 import { TemplateStore } from './template-store';
 
-export type DrawingTool = 'select' | 'connect';
+export type DrawingTool = 'move' | 'select' | 'connect';
 export type GridMode = 'noGrid' | 'minorGrid' | 'majorGrid';
 export type SelectableElementRef = ComponentRef<DrawingItem> | ComponentRef<Connector>;
 
@@ -76,6 +76,16 @@ export class DrawingStore {
 
   setActiveTool(tool: DrawingTool) {
     this.activeTool.set(tool);
+  }
+
+  resolveActiveTool(event: PointerEvent): DrawingTool | null {
+    if (event.button !== 0) {
+      return null;
+    }
+
+    const activeTool = this.activeTool();
+
+    return activeTool === 'select' && event.ctrlKey ? 'move' : activeTool;
   }
 
   setCurrentZoom(zoom: number) {

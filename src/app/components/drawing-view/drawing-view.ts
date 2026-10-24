@@ -18,6 +18,15 @@ import { Connector } from '../connector/connector';
 import { DrawingItem } from '../drawing-item/drawing-item';
 import { MouseConnectionLine } from '../mouse-connection-line/mouse-connection-line';
 
+interface ViewportDragState {
+  readonly pointerId: number;
+  readonly startPointer: DOMPoint;
+  readonly startOffset: {
+    readonly x: number;
+    readonly y: number;
+  };
+}
+
 @Component({
   selector: 'app-drawing-view',
   standalone: true,
@@ -41,6 +50,7 @@ export class DrawingView {
   protected readonly gridY = -(this.gridHeight - this.drawingHeight) / 2;
   private readonly cameraOffset = signal({ x: 0, y: 0 });
   private readonly zoomSensitivity = 0.4;
+  private viewportDrag: ViewportDragState | null = null;
   protected readonly currentZoom = this.drawingStore.currentZoom;
   protected readonly zoomLabel = computed(() => `${Math.round(this.currentZoom() * 100)}%`);
   protected readonly drawingTransform = computed(() => {
@@ -49,7 +59,16 @@ export class DrawingView {
     return `translate(${offset.x} ${offset.y}) scale(${this.currentZoom()})`;
   });
   protected readonly activeTool = this.drawingStore.activeTool;
-  protected readonly svgCursor = computed(() => (this.activeTool() === 'select' ? 'pointer' : 'crosshair'));
+  protected readonly svgCursor = computed(() => {
+    switch (this.activeTool()) {
+      case 'move':
+        return 'move';
+      case 'select':
+        return 'pointer';
+      default:
+        return 'crosshair';
+    }
+  });
   protected readonly selectedEntities = this.itemsStore.selectedEntities;
   protected readonly drawingSvg = viewChild.required<ElementRef<SVGSVGElement>>('drawingSvgElement');
   protected readonly drawingViewport = viewChild.required<ElementRef<SVGGElement>>('drawingViewportElement');
@@ -76,6 +95,10 @@ export class DrawingView {
 
   protected onSelectTool(): void {
     this.drawingStore.setActiveTool('select');
+  }
+
+  protected onMoveTool(): void {
+    this.drawingStore.setActiveTool('move');
   }
 
   protected onConnectTool(): void {
@@ -155,11 +178,66 @@ export class DrawingView {
       return;
     }
 
-    this.cameraOffset.set({
+    this.setCameraOffset({
       x: pointerInSvg.x - pointerInWorld.x * nextZoom,
       y: pointerInSvg.y - pointerInWorld.y * nextZoom,
-    });
+    }, nextZoom);
     this.drawingStore.setCurrentZoom(nextZoom);
+  }
+
+  protected onViewportPointerDown(event: PointerEvent): void {
+    if (this.drawingStore.resolveActiveTool(event) !== 'move') {
+      return;
+    }
+
+    const startPointer = this.getPointerPositionInSvg(event);
+
+    if (!startPointer) {
+      return;
+    }
+
+    event.preventDefault();
+    this.viewportDrag = {
+      pointerId: event.pointerId,
+      startPointer,
+      startOffset: this.cameraOffset(),
+    };
+    this.drawingSvg().nativeElement.setPointerCapture(event.pointerId);
+  }
+
+  protected onViewportPointerMove(event: PointerEvent): void {
+    const viewportDrag = this.viewportDrag;
+
+    if (!viewportDrag || viewportDrag.pointerId !== event.pointerId) {
+      return;
+    }
+
+    const currentPointer = this.getPointerPositionInSvg(event);
+
+    if (!currentPointer) {
+      return;
+    }
+
+    this.setCameraOffset({
+      x: viewportDrag.startOffset.x + currentPointer.x - viewportDrag.startPointer.x,
+      y: viewportDrag.startOffset.y + currentPointer.y - viewportDrag.startPointer.y,
+    }, this.currentZoom());
+  }
+
+  protected onViewportPointerEnd(event: PointerEvent): void {
+    const viewportDrag = this.viewportDrag;
+
+    if (!viewportDrag || viewportDrag.pointerId !== event.pointerId) {
+      return;
+    }
+
+    this.viewportDrag = null;
+
+    const svg = this.drawingSvg().nativeElement;
+
+    if (svg.hasPointerCapture(event.pointerId)) {
+      svg.releasePointerCapture(event.pointerId);
+    }
   }
 
   protected onDelete(): void {
@@ -259,5 +337,28 @@ export class DrawingView {
     this.connectionStore.register(connection, connectorRef);
 
     return connectorRef;
+  }
+
+  private getPointerPositionInSvg(event: PointerEvent): DOMPoint | null {
+    const screenMatrix = this.drawingSvg().nativeElement.getScreenCTM();
+
+    if (!screenMatrix) {
+      return null;
+    }
+
+    return new DOMPoint(event.clientX, event.clientY).matrixTransform(screenMatrix.inverse());
+  }
+
+  private setCameraOffset(
+    offset: {readonly x: number; readonly y: number},
+    zoom: number,
+  ): void {
+    const minimumOffsetX = this.drawingWidth - this.drawingWidth * zoom;
+    const minimumOffsetY = this.drawingHeight - this.drawingHeight * zoom;
+
+    this.cameraOffset.set({
+      x: clamp(offset.x, minimumOffsetX, 0),
+      y: clamp(offset.y, minimumOffsetY, 0),
+    });
   }
 }

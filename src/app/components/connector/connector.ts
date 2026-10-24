@@ -132,7 +132,7 @@ export class Connector {
   }
 
   protected onControlPointPointerDown(event: PointerEvent, controlPoint: 'from' | 'destination'): void {
-    if (this.drawingStore.activeTool() !== 'select' || !this.isSelected()) {
+    if (this.drawingStore.resolveActiveTool(event) !== 'select' || !this.isSelected()) {
       return;
     }
 

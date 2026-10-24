@@ -3,6 +3,15 @@
     <button
       type="button"
       class="drawing-view__tool-button"
+      [class.is-active]="activeTool() === 'move'"
+      [attr.aria-pressed]="activeTool() === 'move'"
+      (click)="onMoveTool()"
+    >
+      Move
+    </button>
+    <button
+      type="button"
+      class="drawing-view__tool-button"
       [class.is-active]="activeTool() === 'select'"
       [attr.aria-pressed]="activeTool() === 'select'"
       (click)="onSelectTool()"
@@ -77,6 +86,11 @@
     [style.width.px]="drawingWidth"
     [style.height.px]="drawingHeight"
     [style.cursor]="svgCursor()"
+    (pointerdown)="onViewportPointerDown($event)"
+    (pointermove)="onViewportPointerMove($event)"
+    (pointerup)="onViewportPointerEnd($event)"
+    (pointercancel)="onViewportPointerEnd($event)"
+    (lostpointercapture)="onViewportPointerEnd($event)"
     (dragover)="onDragOver($event)"
     (drop)="onDrop($event)"
     (wheel)="onWheel($event)"

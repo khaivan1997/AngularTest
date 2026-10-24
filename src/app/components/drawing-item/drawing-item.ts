@@ -97,7 +97,7 @@ export class DrawingItem implements AfterViewInit {
 
   @HostListener('pointerdown', ['$event'])
   protected onPointerDown(event: PointerEvent): void {
-    if (event.button !== 0 || this.drawingStore.activeTool() !== 'select') {
+    if (this.drawingStore.resolveActiveTool(event) !== 'select') {
       return;
     }
 
