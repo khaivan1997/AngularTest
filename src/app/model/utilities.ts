@@ -43,6 +43,7 @@ export interface DrawingItemExport {
       readonly x: number;
       readonly y: number;
     };
+    readonly rotate: number;
   };
 }
 

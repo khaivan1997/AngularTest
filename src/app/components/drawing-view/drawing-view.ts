@@ -127,6 +127,7 @@ export class DrawingView {
         item.templateRefId,
         item.transform.position.x,
         item.transform.position.y,
+        item.transform.rotate ?? 0,
       );
     }
 
@@ -257,6 +258,10 @@ export class DrawingView {
     this.drawingStore.deleteSelected();
   }
 
+  protected onRotateSelected(offset: number): void {
+    this.drawingStore.rotateSelected(offset);
+  }
+
   protected onClear(): void {
     this.itemsStore.clear();
   }
@@ -309,6 +314,7 @@ export class DrawingView {
     templateId: string,
     posX: number,
     posY: number,
+    rotate = 0,
   ): ComponentRef<DrawingItem> {
     if (typeof templateId !== 'string' || templateId.trim().length === 0) {
       throw new Error('A non-empty templateId is required to add a drawing item.');
@@ -321,6 +327,7 @@ export class DrawingView {
     drawingItemRef.setInput('templateHref', `#${templateId}`);
     drawingItemRef.setInput('posX', posX);
     drawingItemRef.setInput('posY', posY);
+    drawingItemRef.setInput('rotate', rotate);
     drawingItemRef.changeDetectorRef.detectChanges();
     this.itemsStore.register(drawingItemRef);
 

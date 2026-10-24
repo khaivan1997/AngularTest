@@ -62,6 +62,7 @@ export class DrawingItem implements AfterViewInit {
   protected readonly ports = computed(() => this.templateStore.getTemplate(this.hrefId())?.ports ?? []);
   protected readonly posX = model.required<number>();
   protected readonly posY = model.required<number>();
+  public readonly rotate = model(0);
   protected readonly currentEntity = computed(() => this.itemsStore.getEntity(this.itemId()));
   protected readonly isVisuallySelected = computed(
     () => {
@@ -74,7 +75,9 @@ export class DrawingItem implements AfterViewInit {
     () => this.isVisuallySelected() || this.drawingStore.activeTool() === 'connect',
   );
   protected readonly bounds = signal<DrawingItemBounds | null>(null);
-  protected readonly positionTransform = computed(() => `translate(${this.posX()} ${this.posY()})`);
+  protected readonly positionTransform = computed(
+    () => `translate(${this.posX()} ${this.posY()}) rotate(${this.rotate()})`,
+  );
   private readonly templateUse = viewChild.required<ElementRef<SVGUseElement>>('templateUse');
   private readonly portElements = viewChildren<ElementRef<SVGCircleElement>>('drawingPort');
   private pointerDrag: PointerDragState | null = null;
@@ -89,10 +92,15 @@ export class DrawingItem implements AfterViewInit {
     )?.nativeElement;
   }
 
-  public getCurrentTransformPosition(): { readonly position: DOMPoint } {
+  public getCurrentTransformPosition(): { readonly position: DOMPoint; readonly rotate: number } {
     return {
       position: new DOMPoint(this.posX(), this.posY()),
+      rotate: this.rotate(),
     };
+  }
+
+  public rotateBy(offset: number): void {
+    this.rotate.update((rotate) => rotate + offset);
   }
 
   @HostListener('pointerdown', ['$event'])

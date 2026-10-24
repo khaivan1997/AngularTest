@@ -63,7 +63,7 @@ export class ItemsStore {
 
   getExportObject(): readonly DrawingItemExport[] {
     return [...this.renderedEntities()].map(([itemId, entity]) => {
-      const {position} = entity.instance.getCurrentTransformPosition();
+      const {position, rotate} = entity.instance.getCurrentTransformPosition();
 
       return {
         itemId,
@@ -73,6 +73,7 @@ export class ItemsStore {
             x: position.x,
             y: position.y,
           },
+          rotate,
         },
       };
     });

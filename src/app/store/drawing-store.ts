@@ -78,6 +78,12 @@ export class DrawingStore {
     this.activeTool.set(tool);
   }
 
+  rotateSelected(offset: number) {
+    for (const entity of this.itemsStore.selectedEntities()) {
+      entity.instance.rotateBy(offset);
+    }
+  }
+
   resolveActiveTool(event: PointerEvent): DrawingTool | null {
     if (event.button !== 0) {
       return null;

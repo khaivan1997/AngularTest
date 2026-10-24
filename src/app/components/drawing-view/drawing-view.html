@@ -37,6 +37,22 @@
     </button>
     <button
       type="button"
+      class="drawing-view__tool-button"
+      [disabled]="selectedEntities().size === 0"
+      (click)="onRotateSelected(-15)"
+    >
+      -15°
+    </button>
+    <button
+      type="button"
+      class="drawing-view__tool-button"
+      [disabled]="selectedEntities().size === 0"
+      (click)="onRotateSelected(15)"
+    >
+      +15°
+    </button>
+    <button
+      type="button"
       class="drawing-view__tool-button drawing-view__tool-button--delete"
       (click)="onClear()"
     >
